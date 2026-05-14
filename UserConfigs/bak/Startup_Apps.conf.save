@@ -1,8 +1,0 @@
-# /* ---- 💫 https://github.com/JaKooLit 💫 ---- */  #
-# Commands and Apps to be executed at launch
-
-#exec-once = sleep 5 && trcc gui
-exec-once = openrgb --profile "helldivers" --startminimized
-exec-once = lact gui
-# exec-once = sleep 5 && trcc gui theme-load "Custom_zer0"
-exec-once = sleep 5 && trcc gui
