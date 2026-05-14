@@ -1,0 +1,9 @@
+local hl = require("hyprland")
+
+hl.config({
+  application_style = {
+    roundess = 2,
+    border_width = 0,
+    reduce_motion = false,
+  },
+})
