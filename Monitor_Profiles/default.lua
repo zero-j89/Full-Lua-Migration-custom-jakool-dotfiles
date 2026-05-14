@@ -7,7 +7,7 @@ hl.config({
 
     -- Examples preserved from original config:
 
-    -- "eDP-1,preferred,auto,1",
+     "eDP-1,preferred,auto,1",
     -- "eDP-1,2560x1440@165,0x0,1",
     -- "DP-3,1920x1080@240,auto,1",
     -- "DP-1,preferred,auto,1",
