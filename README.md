@@ -13,7 +13,7 @@ let this be your bible lol. I also use a custom Noctalia shell and ive been read
 and i went ahead andf fixed them too so i will be uploading the shells tuff here soon.. That more is just me double
 checking to see if im leaving in any personal API stuff that i do NOT want there for the public to use. Ill include Some images too for you so
 you can see a little of it. I really hope this finds you well and helps someone out there.A lot of these files can be
-implmented into your conversion without taking everything. I tried to elave the stack as simple as possible and I will be adding
+implmented into your conversion without taking everything. I tried to leave the stack as simple as possible and I will be adding
 more as I convert more. <img width="2561" height="1441" alt="Screenshot_14-May_13-51-28_9486" src="https://github.com/user-attachments/assets/22e3ece1-1803-4a05-a1d3-edda018b39c3" />
 <img width="2560" height="1441" alt="Screenshot_14-May_13-50-24_18725" src="https://github.com/user-attachments/assets/fe953196-784d-4111-aa9c-3ca68d144596" />
 <img width="2560" height="1441" alt="Screenshot_14-May_13-50-32_22230" src="https://github.com/user-attachments/assets/41495710-5e28-46a1-8ea6-524570b4eb98" />
