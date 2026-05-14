@@ -2,7 +2,8 @@ Okay so this is basically jakoolits dotfiles but slightly modified for my stack 
 before you use these( if you choose to ).DO NOT FORGET TO BACKUP YOUR ORIGINAL /.config/hypr folder!! For these to work you will need the original jakoolits 
 dependancies. I suggest removing the whole /hypr folder entirely or
 just renaming it so when you replace it with these files you wont have a confusing directory.. OKAY! Down to
-basics here.. Of course you will want to edit all your Monitors.lua files (and monitors.lua)
+basics here.. /configs/ENVariables.lua...You want to use mine as a syntax example.. DO NOT just blindly change to my settings. 
+Of course you will want to edit all your Monitors.lua files (and monitors.lua)
 to your monitor/s... Same will need to be done for workspaces. Besides that all the important stuff is done so you can pick and choose if 
 you have started your conversion and are stuck on some files, let this be your bible lol. I also use a custom
 Noctalia shell and ive been reading about all the issues from the n ew lua conversion ( had most of them myself)
