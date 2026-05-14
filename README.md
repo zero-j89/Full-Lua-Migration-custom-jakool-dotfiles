@@ -6,9 +6,10 @@ just renaming it so when you replace it with these files you wont have a confusi
 basics here..This DOES NOT contain waybar(id like to help folks out there if they need so fel free to reach out)
 /configs/ENVariables.lua...You want to use mine as a syntax example.. DO NOT just blindly change to my settings. 
 Of course you will want to edit all your Monitors.lua files (and monitors.lua)
-to your monitor/s... Same will need to be done for workspaces. Besides that all the important stuff is done so you can pick and choose if 
-you have started your conversion and are stuck on some files, let this be your bible lol. I also use a custom
-Noctalia shell and ive been reading about all the issues from the n ew lua conversion ( had most of them myself)
+to your monitor/s...Same will need to be done for workspaces. I am in the process of converting the other decorations\animations conf.lua 
+conversion so for now it needsto stay at its currentsettings so do NOT change them through your Rofi menu.  
+Besides that all the important stuff is done so you can pick and choose if you have started your conversion and are stuck on some files,
+let this be your bible lol. I also use a custom Noctalia shell and ive been reading about all the issues from the new lua conversion ( had most of them myself)
 and i went ahead andf fixed them too so i will be uploading the shells tuff here soon.. That more is just me double
 checking to see if im leaving in any personal API stuff that i do NOT want there for the public to use. Ill include Some images too for you so
 you can see a little of it. I really hope this finds you well and helps someone out there.A lot of these files can be
