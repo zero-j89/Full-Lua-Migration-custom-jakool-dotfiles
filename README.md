@@ -1,3 +1,4 @@
+
 Okay so this is basically jakoolits dotfiles but slightly modified for my stack so theres a few things you will want to edit
 before you use these( if you choose to ).DO NOT FORGET TO BACKUP YOUR ORIGINAL /.config/hypr folder!! For these to work you will need the original jakoolits 
 dependancies. I suggest removing the whole /hypr folder entirely or
@@ -19,3 +20,4 @@ more as I convert more. <img width="2561" height="1441" alt="Screenshot_14-May_1
 <img width="2561" height="1441" alt="Screenshot_14-May_13-19-22_28323" src="https://github.com/user-attachments/assets/7a4737db-0d81-4bf2-8294-4358a911c5a3" />
 <img width="2561" height="1441" alt="Screenshot_14-May_13-19-31_12186" src="https://github.com/user-attachments/assets/fb532cc5-6add-4e58-91c9-98cb586f24c6" />
 <img width="2557" height="1436" alt="Screenshot_14-May_13-19-36_28255" src="https://github.com/user-attachments/assets/a1085002-505c-4560-a398-45431bf8594f" />
+<img width="2561" height="491" alt="Screenshot_14-May_15-08-25_13015" src="https://github.com/user-attachments/assets/1e58cdef-56ec-48c3-94bd-f7af07951f6e" />
