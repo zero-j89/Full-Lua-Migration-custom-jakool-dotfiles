@@ -3,7 +3,7 @@ Okay so this is basically jakoolits dotfiles but slightly modified for my stack 
 before you use these( if you choose to ).DO NOT FORGET TO BACKUP YOUR ORIGINAL /.config/hypr folder!! For these to work you will need the original jakoolits 
 dependancies. I suggest removing the whole /hypr folder entirely or
 just renaming it so when you replace it with these files you wont have a confusing directory.. OKAY! Down to
-basics here..This DOES NOT contain waybar(id like to help folks out there if they need so fel free to reach out)
+basics here..This DOES NOT contain waybar(id like to help folks out there if they need so feel free to reach out)
 /configs/ENVariables.lua...You want to use mine as a syntax example.. DO NOT just blindly change to my settings. 
 Of course you will want to edit all your Monitors.lua files (and monitors.lua)
 to your monitor/s...Same will need to be done for workspaces. I am in the process of converting the other decorations\animations conf.lua 
