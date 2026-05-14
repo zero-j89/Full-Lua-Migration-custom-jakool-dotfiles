@@ -1,4 +1,3 @@
-
 local function wr(rule)
   hl.window_rule(rule)
 end
@@ -112,8 +111,8 @@ wr({ match = { class = "^([Ff]erdium)$" }, center = true })
 -- IDLE INHIBIT
 wr({ match = { fullscreen = true }, idle_inhibit = "fullscreen" })
 wr({ match = { fullscreen = "1" }, idle_inhibit = "fullscreen" })
-wr({ match = { class = "^(*)$" }, idle_inhibit = "fullscreen" })
-wr({ match = { title = "^(*)$" }, idle_inhibit = "fullscreen" })
+wr({ match = { class = "^(.*)$" }, idle_inhibit = "fullscreen" })
+wr({ match = { title = "^(.*)$" }, idle_inhibit = "fullscreen" })
 
 -- FLOAT
 wr({ match = { tag = "KooL_Cheat" }, float = true })
@@ -165,7 +164,7 @@ wr({ match = { tag = "games" }, no_blur = true, fullscreen = 0 })
 wr({ match = { tag = "games" }, fullscreen = 0 })
 
 -- NO INITIAL FOCUS
-wr({ match = { class = "^(jetbrains-*)" }, no_initial_focus = true })
+wr({ match = { class = "^(jetbrains-.*)$" }, no_initial_focus = true })
 wr({ match = { title = "^(wind.*)$" }, no_initial_focus = true })
 
 -- NAMED RULES
@@ -201,3 +200,11 @@ lr({ match = { namespace = "quickshell:.*" }, blur = true })
 lr({ match = { namespace = "quickshell:.*" }, ignore_alpha = 0.5 })
 lr({ match = { namespace = "noctalia-background-.*$" }, blur = true })
 lr({ match = { namespace = "noctalia-background-.*$" }, ignore_alpha = 0.5 })
+
+-- TEST RULE: keep only while verifying, remove later if annoying.
+-- wr({
+--   name = "kitty-test-float",
+--   match = { class = "^(kitty)$" },
+--   float = true,
+--   center = true,
+-- })

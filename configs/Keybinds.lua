@@ -41,6 +41,8 @@ end
 -- Common shortcuts
 b(mainMod, "B", exec([[xdg-open "https://"]]), "open default browser")
 b(mainMod, "D", exec("qs -p ~/.config/quickshell-noctalia ipc call launcher toggle"), "Noctalia launcher")
+
+-- b(mainMod, ";", exec("rofi -show drun"), "rofi launcher")
 b(mainMod, "A", exec(sh("$scriptsDir/OverviewToggle.sh")), "desktop overview")
 b(mainMod, "Return", exec(term), "Open terminal")
 b(mainMod, "E", exec(files), "file manager")
@@ -86,7 +88,7 @@ b(mainMod .. " + CTRL", "F12", dispatch("movecurrentworkspacetomonitor d"), "mov
 
 -- System
 b("CTRL + ALT", "Delete", exec(home .. "/.config/hypr/scripts/toggle_sysmon.sh"))
-b(mainMod, "Q", dispatch("killactive"), "close active window")
+b(mainMod, "Q", hl.dsp.window.close(), "close active window")
 b(mainMod .. " + SHIFT", "Q", exec(sh("$scriptsDir/KillActiveProcess.sh")), "Terminate active process")
 b("CTRL + ALT", "L", exec("qs -p ~/.config/quickshell-noctalia ipc call lockScreen lock"))
 b("CTRL + ALT", "P", exec(sh("$scriptsDir/Wlogout.sh")), "powermenu")
@@ -113,23 +115,23 @@ b("ALT", "Tab", function()
 end, "cycle next window")
 
 -- Special keys / hotkeys
-b("", "XF86AudioRaiseVolume", exec(sh("$scriptsDir/Volume.sh --inc")), "volume up", { locked = true, repeating = true })
-b("", "XF86AudioLowerVolume", exec(sh("$scriptsDir/Volume.sh --dec")), "volume down", { locked = true, repeating = true })
-b("ALT", "XF86AudioRaiseVolume", exec(sh("$scriptsDir/Volume.sh --inc-precise")), "volume up precise", { locked = true, repeating = true })
-b("ALT", "XF86AudioLowerVolume", exec(sh("$scriptsDir/Volume.sh --dec-precise")), "volume down precise", { locked = true, repeating = true })
+-- b("", "xf86audioraisevolume", exec(sh("$scriptsDir/Volume.sh --inc")), "volume up", { locked = true, repeating = true })
+-- b("", "xf86audiolowervolume", exec(sh("$scriptsDir/Volume.sh --dec")), "volume down", { locked = true, repeating = true })
+-- b("ALT", "xf86audioraisevolume", exec(sh("$scriptsDir/Volume.sh --inc-precise")), "volume up precise", { locked = true, repeating = true })
+-- b("ALT", "xf86audiolowervolume", exec(sh("$scriptsDir/Volume.sh --dec-precise")), "volume down precise", { locked = true, repeating = true })
 
-b("", "XF86AudioMicMute", exec(sh("$scriptsDir/Volume.sh --toggle-mic")), "toggle mic mute", { locked = true })
-b("", "XF86AudioMute", exec(sh("$scriptsDir/Volume.sh --toggle")), "toggle mute", { locked = true })
-b("", "XF86Sleep", exec("systemctl suspend"), "sleep", { locked = true })
-b("", "XF86Rfkill", exec(sh("$scriptsDir/AirplaneMode.sh")), "airplane mode", { locked = true })
+-- b("", "xf86AudioMicMute", exec(sh("$scriptsDir/Volume.sh --toggle-mic")), "toggle mic mute", { locked = true })
+-- b("", "xf86audiomute", exec(sh("$scriptsDir/Volume.sh --toggle")), "toggle mute", { locked = true })
+-- b("", "xf86Sleep", exec("systemctl suspend"), "sleep", { locked = true })
+-- b("", "xf86Rfkill", exec(sh("$scriptsDir/AirplaneMode.sh")), "airplane mode", { locked = true })
 
 -- Media controls
-b("", "XF86AudioPlayPause", exec(sh("$scriptsDir/MediaCtrl.sh --pause")), "play/pause", { locked = true })
-b("", "XF86AudioPause", exec(sh("$scriptsDir/MediaCtrl.sh --pause")), "pause", { locked = true })
-b("", "XF86AudioPlay", exec(sh("$scriptsDir/MediaCtrl.sh --pause")), "play", { locked = true })
-b("", "XF86AudioNext", exec(sh("$scriptsDir/MediaCtrl.sh --nxt")), "next track", { locked = true })
-b("", "XF86AudioPrev", exec(sh("$scriptsDir/MediaCtrl.sh --prv")), "previous track", { locked = true })
-b("", "XF86AudioStop", exec(sh("$scriptsDir/MediaCtrl.sh --stop")), "stop", { locked = true })
+-- b("", "xf86AudioPlayPause", exec(sh("$scriptsDir/MediaCtrl.sh --pause")), "play/pause", { locked = true })
+-- b("", "xf86AudioPause", exec(sh("$scriptsDir/MediaCtrl.sh --pause")), "pause", { locked = true })
+-- b("", "xf86AudioPlay", exec(sh("$scriptsDir/MediaCtrl.sh --pause")), "play", { locked = true })
+-- b("", "xf86AudioNext", exec(sh("$scriptsDir/MediaCtrl.sh --nxt")), "next track", { locked = true })
+-- b("", "xf86AudioPrev", exec(sh("$scriptsDir/MediaCtrl.sh --prv")), "previous track", { locked = true })
+-- b("", "xf86audiostop", exec(sh("$scriptsDir/MediaCtrl.sh --stop")), "stop", { locked = true })
 
 -- Screenshot keybindings
 b(mainMod .. " + ALT", "S", exec(sh("$scriptsDir/ScreenShot.sh --now")), "screenshot now")
@@ -204,3 +206,16 @@ b(mainMod, "comma", hl.dsp.focus({ workspace = "e-1" }), "previous workspace")
 -- Mouse move / resize
 b(mainMod, "mouse:272", hl.dsp.window.drag(), "move window", { mouse = true })
 b(mainMod, "mouse:273", hl.dsp.window.resize(), "resize window", { mouse = true })
+
+b("", "code:123", exec("~/.config/hypr/scripts/Volume.sh --inc"), "volume up", { locked = true, repeating = true })
+b("", "code:121", exec(sh("$scriptsDir/Volume.sh --toggle")), "toggle mute", { locked = true })
+b("", "code:122", exec(sh("$scriptsDir/Volume.sh --dec")), "volume down", { locked = true, repeating = true })
+b("ALT", "code:122", exec(sh("$scriptsDir/Volume.sh --dec-precise")), "volume down precise", { locked = true, repeating = true })
+b("", "code:174", exec(sh("$scriptsDir/MediaCtrl.sh --stop")), "stop", { locked = true })
+
+
+--  Steam Custom
+b(mainMod .. " + SHIFT", "N",
+  exec("~/.config/hypr/UserScripts/LaunchSteamWorkspace5.sh"),
+  "launch Steam on workspace 5"
+)

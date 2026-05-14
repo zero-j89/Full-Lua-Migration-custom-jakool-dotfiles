@@ -33,10 +33,10 @@ hl.monitor({
   scale = 1.0,
 })
 
-hl.bind("SUPER + RETURN", hl.dsp.exec_cmd("kitty"))
-hl.bind("SUPER + M", hl.dsp.exit())
-hl.bind("CTRL + ALT + BACKSPACE", hl.dsp.exit())
-hl.bind("SUPER + B", hl.dsp.exec_cmd("brave"))
+-- hl.bind("SUPER + RETURN", hl.dsp.exec_cmd("kitty"))
+-- hl.bind("SUPER + M", hl.dsp.exit())
+-- hl.bind("CTRL + ALT + BACKSPACE", hl.dsp.exit())
+-- hl.bind("SUPER + B", hl.dsp.exec_cmd("brave"))
 
 hl.on("hyprland.start", function()
   hl.exec_cmd("kitty")
