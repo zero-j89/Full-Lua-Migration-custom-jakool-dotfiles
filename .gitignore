@@ -1,0 +1,7 @@
+*.bak
+*.save
+*.log
+backup/
+backupbeforelua/
+configsbeforeLUA/
+ProfileBeforeLua/
