@@ -1,14 +1,10 @@
 #!/usr/bin/env bash
 # Rofi menu for KooL Hyprland Quick Settings (SUPER SHIFT E)
-# Updated for UserConfigs/configs separation
+# Updated for Lua config
 
-# Modify this config file for default terminal and EDITOR
-config_file="$HOME/.config/hypr/UserConfigs/01-UserDefaults.conf"
-
-tmp_config_file=$(mktemp)
-sed 's/^\$//g; s/ = /=/g' "$config_file" > "$tmp_config_file"
-source "$tmp_config_file"
-# ##################################### #
+# Editor defaults
+term="kitty"
+edit="nano"
 
 # variables
 configs="$HOME/.config/hypr/configs"
@@ -18,7 +14,6 @@ msg=' ⁉️ Choose what to do ⁉️'
 iDIR="$HOME/.config/swaync/images"
 scriptsDir="$HOME/.config/hypr/scripts"
 UserScripts="$HOME/.config/hypr/UserScripts"
-
 # Function to show info notification
 show_info() {
     if [[ -f "$iDIR/info.png" ]]; then
@@ -216,10 +211,10 @@ main() {
         "Edit User Keybinds") file="$UserConfigs/UserKeybinds.lua" ;;
         "Edit User Startup Apps (overlay)") file="$UserConfigs/Startup_Apps.lua" ;;
         "Edit User Window Rules (overlay)") file="$UserConfigs/WindowRules.lua" ;;
-        "Edit User Settings") file="$configs/SystemSettings.lua"; show_info "Editing default settings. Copy to UserConfigs/UserSettings.lua to override." ;;
+        "Edit User Settings") file="$Userconfigs/UserSettings.lua"; show_info "Editing default settings. Copy to UserConfigs/UserSettings.lua to override." ;;
         "Edit User Decorations") file="$UserConfigs/UserDecorations.lua" ;;
         "Edit Old Animations") file="$UserConfigs/UserAnimations.lua" ;;
-        "Edit User Laptop Settings") file="$UserConfigs/Laptops.lua" ;;
+        "Edit User Laptop Settings") file="$UserConfigs/Laptops.conf" ;;
         "Edit System Default Keybinds") file="$configs/Keybinds.lua" ;;
         "Edit System Default Startup Apps") file="$configs/Startup_Apps.lua" ;;
         "Edit System Default Window Rules") file="$configs/WindowRules.lua" ;;
