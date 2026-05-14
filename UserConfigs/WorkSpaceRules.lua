@@ -6,7 +6,6 @@
 
 -- Examples only:
 
--- local hl = require("hyprland")
 
 -- hl.config({
 --   workspace = {

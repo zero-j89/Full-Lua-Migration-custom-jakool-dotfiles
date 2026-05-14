@@ -1,25 +1,14 @@
-local hl = require("hyprland")
+hl.monitor({
+  output = "desc:Acer Technologies KG271U N3 1322131231233",
+  mode = "2560x1440@180.0",
+  position = "1x2000",
+  scale = 1.0,
+})
 
-hl.config({
-  monitor = {
-    {
-      "desc:Acer Technologies KG271U N3 1322131231233",
-      "2560x1440@180.0",
-      "1x2000",
-      "1.0",
-    },
-
-    {
-      "desc:Sceptre Tech Inc Sceptre O34",
-      "3440x1440@165.0",
-      "2561x0",
-      "1.0",
-    },
-
-    {
-      "desc:Sceptre Tech Inc Sceptre O34",
-      "transform",
-      "3",
-    },
-  },
+hl.monitor({
+  output = "desc:Sceptre Tech Inc Sceptre O34",
+  mode = "3440x1440@165.0",
+  position = "2561x0",
+  scale = 1.0,
+  transform = 3,
 })

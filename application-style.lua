@@ -1,4 +1,3 @@
-local hl = require("hyprland")
 
 hl.config({
   application_style = {

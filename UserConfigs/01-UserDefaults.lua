@@ -1,4 +1,3 @@
-local hl = require("hyprland")
 
 -- Default editor fallback
 _G.edit = os.getenv("EDITOR") or "nano"

@@ -1,68 +1,41 @@
 -- ~/.config/hypr/configs/Startup_Apps.lua
 
-local hl = require("hyprland")
 local home = os.getenv("HOME")
 
 local scriptsDir = home .. "/.config/hypr/scripts"
 local userScripts = home .. "/.config/hypr/UserScripts"
-local lock = scriptsDir .. "/LockScreen.sh"
 
--- local swwwRandom = userScripts .. "/WallpaperAutoChange.sh"
--- local livewallpaper = ""
--- local wallDIR = home .. "/Pictures/wallpapers"
+local function run(cmd)
+  hl.exec_cmd(cmd)
+end
 
-hl.config({
-  exec_once = {
-    -- Wallpaper stuff
-    -- "swww-daemon --format xrgb",
-    -- [[mpvpaper '*' -o "load-scripts=no no-audio --loop" ]] .. livewallpaper,
-    -- swwwRandom .. " " .. wallDIR,
+hl.on("hyprland.start", function()
+  -- Environment import
+  run("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
+  run("systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
 
-    "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP",
-    "systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP",
-    home .. "/.config/hypr/scripts/Dropterminal.sh kitty &",
-    scriptsDir .. "/Polkit.sh",
-    "nm-applet --indicator",
+  -- Startup
+  run(home .. "/.config/hypr/scripts/Dropterminal.sh kitty &")
+  run(scriptsDir .. "/Polkit.sh")
+  run("nm-applet --indicator")
 
-    -- "nm-tray",
-    -- "swaync",
-    -- "ags",
-    -- "blueman-applet",
-    -- "rog-control-center",
-    -- "sleep 2 && waybar",
-    -- "qs -c overview",
+  -- Clipboard manager
+  run("wl-paste --type text --watch cliphist store")
+  run("wl-paste --type image --watch cliphist store")
 
-    -- "sleep 2 && hypridle",
-    -- scriptsDir .. "/Hyprsunset.sh init",
+  -- Apps / services
+  run("blueman-applet")
+  run("qs -c overview")
+  run("qs -p ~/.config/quickshell-noctalia")
+  run(scriptsDir .. "/KeybindsLayoutInit.sh")
+  run("systemctl --user start hyprpolkitagent")
+  run("hypridle")
+  run("~/.local/bin/hypr-cursor-untrap")
 
-    -- Clipboard manager
-    "wl-paste --type text --watch cliphist store",
-    "wl-paste --type image --watch cliphist store",
-
-    -- Rainbow borders
-    -- userScripts .. "/RainbowBorders.sh",
-
-    -- Persistent wallpaper
-    -- "swww-daemon --format xrgb && swww img " .. wallDIR .. "/mecha-nostalgia.png",
-
-    -- Gnome polkit for NixOS
-    -- scriptsDir .. "/Polkit-NixOS.sh",
-
-    -- Force xdg-desktop-portal-hyprland
-    -- scriptsDir .. "/PortalHyprland.sh",
-
-    "blueman-applet",
-    "qs -c overview",
-    -- "sleep 2 && qs -c unit3-volume &",
-    "qs -p ~/.config/quickshell-noctalia",
-    scriptsDir .. "/KeybindsLayoutInit.sh",
-    "systemctl --user start hyprpolkitagent",
-    "hypridle",
-    "~/.local/bin/hypr-cursor-untrap",
-
-    -- "openrgb --profile \"helldivers\"",
-    -- "lact gui",
-    -- "sleep 5 && trcc gui",
-    -- "sleep 5 trcc theme-load \"Custom_zer0\"",
-  },
-})
+  -- Disabled examples:
+  -- run("swww-daemon --format xrgb")
+  -- run("sleep 2 && waybar")
+  -- run(scriptsDir .. "/Hyprsunset.sh init")
+  -- run(userScripts .. "/RainbowBorders.sh")
+  -- run(scriptsDir .. "/PortalHyprland.sh")
+end)

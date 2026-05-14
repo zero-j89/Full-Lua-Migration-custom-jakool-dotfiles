@@ -1,4 +1,3 @@
-local hl = require("hyprland")
 
 local function wr(rule)
   hl.window_rule(rule)

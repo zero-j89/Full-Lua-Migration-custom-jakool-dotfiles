@@ -1,13 +1,9 @@
-local hl = require("hyprland")
 local home = os.getenv("HOME")
-
 local scriptsDir = home .. "/.config/hypr/scripts"
 
 hl.config({
   dwindle = {
-    -- pseudotile removed/deprecated in newer Hyprland
     preserve_split = true,
-    -- smart_split = true,
     special_scale_factor = 0.8,
   },
 
@@ -30,9 +26,7 @@ hl.config({
     kb_rules = "",
     repeat_rate = 50,
     repeat_delay = 300,
-
     sensitivity = 0,
-    -- accel_profile = "",
     numlock_by_default = true,
     left_handed = false,
     follow_mouse = 1,
@@ -59,22 +53,10 @@ hl.config({
 
   gestures = {
     gesture = {
-      { 3, "horizontal", "workspace" },
-      {
-        4,
-        "up",
-        "dispatcher",
-        "exec",
-        [[hyprctl keyword cursor:zoom_factor "$(hyprctl getoption cursor:zoom_factor | awk 'NR==1 {factor = $2; if (factor < 1) {factor = 1}; print factor * 1.5}')"]],
-      },
-      {
-        4,
-        "down",
-        "dispatcher",
-        "exec",
-        [[hyprctl keyword cursor:zoom_factor "$(hyprctl getoption cursor:zoom_factor | awk 'NR==1 {factor = $2; if (factor < 1) {factor = 1}; print factor / 1.5}')"]],
-      },
-      { 3, "up", "dispatcher", "exec", scriptsDir .. "/OverviewToggle.sh" },
+      "3, horizontal, workspace",
+      [[4, up, dispatcher, exec, hyprctl keyword cursor:zoom_factor "$(hyprctl getoption cursor:zoom_factor | awk 'NR==1 {factor = $2; if (factor < 1) {factor = 1}; print factor * 1.5}')"]],
+      [[4, down, dispatcher, exec, hyprctl keyword cursor:zoom_factor "$(hyprctl getoption cursor:zoom_factor | awk 'NR==1 {factor = $2; if (factor < 1) {factor = 1}; print factor / 1.5}')"]],
+      "3, up, dispatcher, exec, " .. scriptsDir .. "/OverviewToggle.sh",
     },
 
     workspace_swipe_distance = 500,
@@ -83,13 +65,11 @@ hl.config({
     workspace_swipe_cancel_ratio = 0.5,
     workspace_swipe_create_new = true,
     workspace_swipe_forever = true,
-    -- workspace_swipe_use_r = true,
   },
 
   misc = {
     disable_hyprland_logo = true,
     disable_splash_rendering = true,
-    -- vfr moved/removed; leave disabled
     vrr = 2,
     mouse_move_enables_dpms = true,
     enable_swallow = false,
