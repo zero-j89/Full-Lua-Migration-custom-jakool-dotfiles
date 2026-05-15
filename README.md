@@ -9,6 +9,9 @@ You might want to edit all your Monitors.lua files (and monitors.lua) otherwise 
 to your monitor/s...Same will need to be done for workspaces. I am in the process of converting the other decorations\animations conf.lua 
 conversion so for now it needs to stay at its current settings so do NOT change them through your Rofi menu. Besides that, all the important files are done so you can pick and choose if you have started your conversion and are stuck on some files, let this be your bible lol. I also have been testing a custom Noctalia shell and ive been reading about all the issues from the new lua conversion for calls (had most of them myself on my test stack) so i went ahead and fixed them too,  I will be uploading the shell stuff here soon.. That more or less is just me double checking to see if im leaving in any personal API stuff that I do NOT want there for the public to use. Ill include Some images of the stack
 so you can see a little of it. I really hope this finds you well and helps someone out there.A lot of these files can be implmented into your conversion without taking everything. I tried to leave the stack as simple as possible and I will be adding more as I convert more.. Remember this is mostly for people, who startewd maintaining their own dots after starting from a preconfig like JaKool's.
+
+
+5/15/2026 Edit: fixed all move window/resize/etc plus drop terminal script and bind.
  <img width="2561" height="1441" alt="Screenshot_14-May_13-51-28_9486" src="https://github.com/user-attachments/assets/22e3ece1-1803-4a05-a1d3-edda018b39c3" />
 <img width="2560" height="1441" alt="Screenshot_14-May_13-50-24_18725" src="https://github.com/user-attachments/assets/fe953196-784d-4111-aa9c-3ca68d144596" />
 <img width="2560" height="1441" alt="Screenshot_14-May_13-50-32_22230" src="https://github.com/user-attachments/assets/41495710-5e28-46a1-8ea6-524570b4eb98" />
