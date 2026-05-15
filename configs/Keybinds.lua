@@ -64,9 +64,13 @@ b(mainMod, "X", exec("qs -p ~/.config/quickshell-noctalia ipc call plugin:clippe
 
 b(mainMod .. " + SHIFT", "F", dispatch("fullscreen"), "fullscreen")
 b(mainMod .. " + CTRL", "F", dispatch("fullscreen 1"), "maximize window")
-b(mainMod .. " + SHIFT", "Return", exec(sh("$scriptsDir/Dropterminal.sh " .. term)), "DropDown terminal")
+-- b(mainMod .. " + SHIFT", "Return", exec(sh("$scriptsDir/Dropterminal.sh " .. term)), "DropDown terminal")
 b(mainMod, "SPACE", hl.dsp.window.float(), "Float current window")
 -- b(mainMod .. " + ALT", "SPACE", hl.dsp.workspace.toggle_all_float(), "Float all windows")
+b(mainMod .. " + SHIFT", "Return",
+  hl.dsp.exec_cmd(dropterm),
+  "DropDown terminal"
+)
 
 -- Desktop zooming / magnifier
 -- b(mainMod .. " + ALT", "mouse_down", exec([[hyprctl keyword cursor:zoom_factor "$(hyprctl getoption cursor:zoom_factor | awk 'NR==1 {factor = $2; if (factor < 1) {factor = 1}; print factor * 2.0}')"]]), "zoom in")
@@ -95,14 +99,15 @@ b("CTRL + ALT", "L", exec("qs -p ~/.config/quickshell-noctalia ipc call lockScre
 b("CTRL + ALT", "P", exec(sh("$scriptsDir/Wlogout.sh")), "powermenu")
 b(mainMod .. " + SHIFT", "E", exec(sh("$scriptsDir/Kool_Quick_Settings.sh")), "Quick settings menu")
 
+
 -- Master layout
-b(mainMod .. " + CTRL", "D", dispatch("layoutmsg removemaster"), "remove master")
-b(mainMod, "I", dispatch("layoutmsg addmaster"), "add master")
-b(mainMod .. " + CTRL", "Return", dispatch("layoutmsg swapwithmaster"), "swap with master")
+-- working on this
 
 -- Dwindle layout
-b(mainMod .. " + SHIFT", "I", dispatch("layoutmsg togglesplit"), "toggle split dwindle")
-b(mainMod, "P", dispatch("pseudo"), "toggle pseudo dwindle")
+b(mainMod .. " + SHIFT", "I", hl.dsp.layout("togglesplit"), "toggle split dwindle")
+b(mainMod, "P", hl.dsp.window.pseudo(), "toggle pseudo dwindle")
+
+
 
 -- Layout-aware init
 hl.on("hyprland.start", function()
