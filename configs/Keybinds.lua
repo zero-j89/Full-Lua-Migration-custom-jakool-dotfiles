@@ -47,7 +47,6 @@ b(mainMod, "A", exec(sh("$scriptsDir/OverviewToggle.sh")), "desktop overview")
 b(mainMod, "Return", exec(term), "Open terminal")
 b(mainMod, "E", exec(files), "file manager")
 
--- Features / extras
 b(mainMod, "H", exec(sh("$scriptsDir/KeyHints.sh")), "help / cheat sheet")
 b(mainMod .. " + ALT", "R", exec(sh("$scriptsDir/Refresh.sh")), "refresh bar and menus")
 b(mainMod .. " + ALT", "E", exec(sh("$scriptsDir/RofiEmoji.sh")), "emoji menu")
@@ -73,9 +72,15 @@ b(mainMod .. " + SHIFT", "Return",
 )
 
 -- Desktop zooming / magnifier
--- b(mainMod .. " + ALT", "mouse_down", exec([[hyprctl keyword cursor:zoom_factor "$(hyprctl getoption cursor:zoom_factor | awk 'NR==1 {factor = $2; if (factor < 1) {factor = 1}; print factor * 2.0}')"]]), "zoom in")
--- b(mainMod .. " + ALT", "mouse_up", exec([[hyprctl keyword cursor:zoom_factor "$(hyprctl getoption cursor:zoom_factor | awk 'NR==1 {factor = $2; if (factor < 1) {factor = 1}; print factor / 2.0}')"]]), "zoom out")
+b(mainMod .. " + ALT", "mouse_down",
+  hl.dsp.exec_cmd([[bash -lc 'z=$(hyprctl getoption cursor:zoom_factor -j | jq -r .float); nz=$(awk -v z="$z" "BEGIN { if (z < 1) z = 1; z = z * 1.25; if (z > 5) z = 5; print z }"); hyprctl eval "hl.config({ cursor = { zoom_factor = $nz } })"' ]]),
+  "zoom in"
+)
 
+b(mainMod .. " + ALT", "mouse_up",
+  hl.dsp.exec_cmd([[bash -lc 'z=$(hyprctl getoption cursor:zoom_factor -j | jq -r .float); nz=$(awk -v z="$z" "BEGIN { z = z / 1.25; if (z < 1) z = 1; print z }"); hyprctl eval "hl.config({ cursor = { zoom_factor = $nz } })"' ]]),
+  "zoom out"
+)
 
 -- UserScripts
 b(mainMod .. " + SHIFT", "M", exec(sh("$UserScripts/RofiBeats.sh")), "online music")
@@ -100,11 +105,12 @@ b("CTRL + ALT", "P", exec(sh("$scriptsDir/Wlogout.sh")), "powermenu")
 b(mainMod .. " + SHIFT", "E", exec(sh("$scriptsDir/Kool_Quick_Settings.sh")), "Quick settings menu")
 
 
+
+
 -- Master layout
 -- working on this
 
 -- Dwindle layout
-b(mainMod .. " + SHIFT", "I", hl.dsp.layout("togglesplit"), "toggle split dwindle")
 b(mainMod, "P", hl.dsp.window.pseudo(), "toggle pseudo dwindle")
 
 
