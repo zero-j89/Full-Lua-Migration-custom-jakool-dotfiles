@@ -59,18 +59,19 @@ b(mainMod .. " + SHIFT", "G", exec([[sh -c "qs -p ~/.config/quickshell-noctalia 
 b(mainMod .. " + ALT", "L", exec(sh("$scriptsDir/ChangeLayout.sh")), "toggle master/dwindle layout")
 b(mainMod .. " + ALT", "V", exec(sh("$scriptsDir/ClipManager.sh")), "clipboard manager")
 b(mainMod, "X", exec("qs -p ~/.config/quickshell-noctalia ipc call plugin:clipper toggle"), "Toggle Clipper")
-b(mainMod .. " + CTRL", "R", exec(sh("$scriptsDir/RofiThemeSelector.sh")), "rofi theme selector")
-b(mainMod .. " + CTRL + SHIFT", "R", exec(sh("pkill rofi || true && $scriptsDir/RofiThemeSelector-modified.sh")), "rofi theme selector modified")
+-- b(mainMod .. " + CTRL", "R", exec(sh("$scriptsDir/RofiThemeSelector.sh")), "rofi theme selector")
+-- b(mainMod .. " + CTRL + SHIFT", "R", exec(sh("pkill rofi || true && $scriptsDir/RofiThemeSelector-modified.sh")), "rofi theme selector modified")
 
 b(mainMod .. " + SHIFT", "F", dispatch("fullscreen"), "fullscreen")
 b(mainMod .. " + CTRL", "F", dispatch("fullscreen 1"), "maximize window")
-b(mainMod, "SPACE", dispatch("togglefloating"), "Float current window")
-b(mainMod .. " + ALT", "SPACE", dispatch("workspaceopt allfloat"), "Float all windows")
 b(mainMod .. " + SHIFT", "Return", exec(sh("$scriptsDir/Dropterminal.sh " .. term)), "DropDown terminal")
+b(mainMod, "SPACE", hl.dsp.window.float(), "Float current window")
+-- b(mainMod .. " + ALT", "SPACE", hl.dsp.workspace.toggle_all_float(), "Float all windows")
 
 -- Desktop zooming / magnifier
-b(mainMod .. " + ALT", "mouse_down", exec([[hyprctl keyword cursor:zoom_factor "$(hyprctl getoption cursor:zoom_factor | awk 'NR==1 {factor = $2; if (factor < 1) {factor = 1}; print factor * 2.0}')"]]), "zoom in")
-b(mainMod .. " + ALT", "mouse_up", exec([[hyprctl keyword cursor:zoom_factor "$(hyprctl getoption cursor:zoom_factor | awk 'NR==1 {factor = $2; if (factor < 1) {factor = 1}; print factor / 2.0}')"]]), "zoom out")
+-- b(mainMod .. " + ALT", "mouse_down", exec([[hyprctl keyword cursor:zoom_factor "$(hyprctl getoption cursor:zoom_factor | awk 'NR==1 {factor = $2; if (factor < 1) {factor = 1}; print factor * 2.0}')"]]), "zoom in")
+-- b(mainMod .. " + ALT", "mouse_up", exec([[hyprctl keyword cursor:zoom_factor "$(hyprctl getoption cursor:zoom_factor | awk 'NR==1 {factor = $2; if (factor < 1) {factor = 1}; print factor / 2.0}')"]]), "zoom out")
+
 
 -- UserScripts
 b(mainMod .. " + SHIFT", "M", exec(sh("$UserScripts/RofiBeats.sh")), "online music")
@@ -78,7 +79,7 @@ b(mainMod, "W", exec("qs -p /home/zer0/.config/quickshell-noctalia ipc call plug
 b(mainMod .. " + CTRL", "O", dispatch("setprop active opaque toggle"), "toggle active window opacity")
 b(mainMod .. " + SHIFT", "K", exec(sh("$scriptsDir/KeyBinds.sh")), "search keybinds")
 b(mainMod .. " + SHIFT", "O", exec(sh("$UserScripts/ZshChangeTheme.sh")), "change oh-my-zsh theme")
-b(mainMod .. " + ALT", "C", exec(sh("$UserScripts/RofiCalc.sh")), "calculator")
+b(mainMod .. " + ALT", "C", exec(sh("$UserScripts/RofiCalc.sh")), "calculato\r")
 
 -- Move current workspaces to monitors
 b(mainMod .. " + CTRL", "F9", dispatch("movecurrentworkspacetomonitor l"), "move workspace to left monitor")
@@ -141,22 +142,23 @@ b(mainMod .. " + CTRL + SHIFT", "S", exec(sh("$scriptsDir/ScreenShot.sh --in10")
 b("ALT", "S", exec(sh("$scriptsDir/ScreenShot.sh --active")), "screenshot active window")
 
 -- Resize windows
-b(mainMod .. " + SHIFT", "left", dispatch("resizeactive -50 0"), "resize left (-50)", { repeating = true })
-b(mainMod .. " + SHIFT", "right", dispatch("resizeactive 50 0"), "resize right (+50)", { repeating = true })
-b(mainMod .. " + SHIFT", "up", dispatch("resizeactive 0 -50"), "resize up (-50)", { repeating = true })
-b(mainMod .. " + SHIFT", "down", dispatch("resizeactive 0 50"), "resize down (+50)", { repeating = true })
+b(mainMod .. " + SHIFT", "left", hl.dsp.window.resize({ x = -50, y = 0, relative = true }), "resize left (-50)", { repeating = true })
+b(mainMod .. " + SHIFT", "right", hl.dsp.window.resize({ x = 50, y = 0, relative = true }), "resize right (+50)", { repeating = true })
+b(mainMod .. " + SHIFT", "up", hl.dsp.window.resize({ x = 0, y = -50, relative = true }), "resize up (-50)", { repeating = true })
+b(mainMod .. " + SHIFT", "down", hl.dsp.window.resize({ x = 0, y = 50, relative = true }), "resize down (+50)", { repeating = true })
 
 -- Move windows
-b(mainMod .. " + CTRL", "left", dispatch("movewindow l"), "move window left")
-b(mainMod .. " + CTRL", "right", dispatch("movewindow r"), "move window right")
-b(mainMod .. " + CTRL", "up", dispatch("movewindow u"), "move window up")
-b(mainMod .. " + CTRL", "down", dispatch("movewindow d"), "move window down")
+b(mainMod .. " + CTRL", "left", hl.dsp.window.move({ direction = "l" }), "move window left")
+b(mainMod .. " + CTRL", "right", hl.dsp.window.move({ direction = "r" }), "move window right")
+b(mainMod .. " + CTRL", "up", hl.dsp.window.move({ direction = "u" }), "move window up")
+b(mainMod .. " + CTRL", "down", hl.dsp.window.move({ direction = "d" }), "move window down")
 
 -- Swap windows
-b(mainMod .. " + ALT", "left", dispatch("swapwindow l"), "swap window left")
-b(mainMod .. " + ALT", "right", dispatch("swapwindow r"), "swap window right")
-b(mainMod .. " + ALT", "up", dispatch("swapwindow u"), "swap window up")
-b(mainMod .. " + ALT", "down", dispatch("swapwindow d"), "swap window down")
+b(mainMod .. " + ALT", "left", hl.dsp.window.swap({ direction = "l" }), "swap window left")
+b(mainMod .. " + ALT", "right", hl.dsp.window.swap({ direction = "r" }), "swap window right")
+b(mainMod .. " + ALT", "up", hl.dsp.window.swap({ direction = "u" }), "swap window up")
+b(mainMod .. " + ALT", "down", hl.dsp.window.swap({ direction = "d" }), "swap window down")
+
 
 -- Group
 b(mainMod, "G", hl.dsp.group.toggle({}), "toggle group")
@@ -203,6 +205,7 @@ b(mainMod, "mouse_up", hl.dsp.focus({ workspace = "e-1" }), "previous workspace"
 b(mainMod, "period", hl.dsp.focus({ workspace = "e+1" }), "next workspace")
 b(mainMod, "comma", hl.dsp.focus({ workspace = "e-1" }), "previous workspace")
 
+
 -- Mouse move / resize
 b(mainMod, "mouse:272", hl.dsp.window.drag(), "move window", { mouse = true })
 b(mainMod, "mouse:273", hl.dsp.window.resize(), "resize window", { mouse = true })
@@ -216,6 +219,5 @@ b("", "code:174", exec(sh("$scriptsDir/MediaCtrl.sh --stop")), "stop", { locked 
 
 --  Steam Custom
 b(mainMod .. " + SHIFT", "N",
-  exec("~/.config/hypr/UserScripts/LaunchSteamWorkspace5.sh"),
-  "launch Steam on workspace 5"
+  exec("~/.config/hypr/UserScripts/LaunchSteamWorkspace5.sh")
 )
