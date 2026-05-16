@@ -146,8 +146,16 @@ wallust_random_color() {
 }
 
 NEON_COLORS=(
-  "rgb(8A2BE2)"
-  "rgb(00D4FF)"
+  "rgb(8A2BE2)"  # blueviolet
+  "rgb(00D4FF)"  # cyan neon
+  "rgb(FF00FF)"  # magenta
+  "rgb(7DF9FF)"  # electric blue
+  "rgb(B026FF)"  # neon purple
+  "rgb(00FFFF)"  # aqua
+  "rgb(6A00FF)"  # deep neon violet
+  "rgb(FF44CC)"  # synth pink
+  "rgb(00BFFF)"  # deep sky blue
+  "rgb(CF00FF)"  # ultra purple
 )
 
 FLOW_COLORS=(
