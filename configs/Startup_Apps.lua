@@ -13,8 +13,7 @@ hl.on("hyprland.start", function()
   run("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
   run("systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
 
-  run(home .. "/.config/hypr/scripts/Dropterminal.sh kitty &")
-  run(scriptsDir .. "/Polkit.sh")
+--  run(scriptsDir .. "/Polkit.sh")
   run("nm-applet --indicator")
 
   run("wl-paste --type text --watch cliphist store")
@@ -30,3 +29,6 @@ hl.on("hyprland.start", function()
   run(userScripts .. "/FixCursorDP1.sh")
   run(userScripts .. "/StartTRCC.sh")
 end)
+
+
+
