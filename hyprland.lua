@@ -26,21 +26,21 @@ hl.config({
 })
 
 -- Emergency survival basics FIRST.
-hl.monitor({
-  output = "desc:Acer Technologies KG271U N3 1322131231233",
-  mode = "2560x1440@180.0",
-  position = "1x2000",
-  scale = 1.0,
-})
+-- hl.monitor({
+--  output = "desc:Acer Technologies KG271U N3 1322131231233",
+--  mode = "2560x1440@180.0",
+--  position = "1x2000",
+--  scale = 1.0,
+-- })
 
 -- hl.bind("SUPER + RETURN", hl.dsp.exec_cmd("kitty"))
 -- hl.bind("SUPER + M", hl.dsp.exit())
 -- hl.bind("CTRL + ALT + BACKSPACE", hl.dsp.exit())
 -- hl.bind("SUPER + B", hl.dsp.exec_cmd("brave"))
 
-hl.on("hyprland.start", function()
-  hl.exec_cmd("kitty")
-end)
+-- hl.on("hyprland.start", function()
+--  hl.exec_cmd("kitty")
+-- end)
 
 -- Load converted stack AFTER survival basics.
 require("01-UserDefaults")
@@ -59,14 +59,17 @@ require("wallust-hyprland")
 require("UserDecorations")
 
 -- Load only if the file exists.
--- require("00-default")
+require("00-default")
 require("UserAnimations")
 
+
+
 require("WindowRules")
+--require("UserWindowRules")
 
 require("Keybinds")
 require("UserKeybinds")
-
+require("UserStartup_Apps")
 require("monitors")
 require("workspaces")
 require("RainbowBorderColor")
