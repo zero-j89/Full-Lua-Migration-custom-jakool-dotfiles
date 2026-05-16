@@ -9,7 +9,7 @@ _G.dropterm = "kitty --class dropdown-terminal"
 
 
 -- Search engine
-_G.Search_Engine = "https://www.google.com/search?q={}"
+_G.Search_Engine = "https://www.google.com/search?q="
 
 -- Optional EDITOR environment variable
 -- Uncomment if desired:
