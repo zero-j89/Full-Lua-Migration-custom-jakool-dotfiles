@@ -3,7 +3,8 @@ local home = os.getenv("HOME")
 
 hl.on("hyprland.start", function()
    hl.exec_cmd('openrgb --startminimized --profile "helldivers"')
-   hl.exec_cmd(_G.dropterm)
+   hl.exec_cmd(dropterm)
+   hl.exec_cmd(os.getenv("HOME") .. "/.config/hypr/UserScripts/RainbowBorders.sh restore")
 end)
 
 -- end)
