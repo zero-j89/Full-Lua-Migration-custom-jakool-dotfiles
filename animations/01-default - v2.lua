@@ -1,39 +1,139 @@
-# /* ---- 💫 https://github.com/JaKooLit 💫 ---- */  #
-
-# old animations
-
 hl.config({
   animations = {
     enabled = true,
-
-    bezier = {
-      { "myBezier", 0.05, 0.9, 0.1, 1.05 },
-      { "linear", 0.0, 0.0, 1.0, 1.0 },
-
-      { "wind", 0.05, 0.9, 0.1, 1.05 },
-      { "winIn", 0.1, 1.1, 0.1, 1.1 },
-      { "winOut", 0.3, -0.3, 0, 1 },
-
-      { "slow", 0, 0.85, 0.3, 1 },
-      { "overshot", 0.7, 0.6, 0.1, 1.1 },
-      { "bounce", 1.1, 1.6, 0.1, 0.85 },
-      { "sligshot", 1, -1, 0.15, 1.25 },
-      { "nice", 0, 6.9, 0.5, -4.20 },
-    },
-
-    animation = {
-      { "windowsIn", 1, 5, "slow", "popin" },
-      { "windowsOut", 1, 5, "winOut", "popin" },
-      { "windowsMove", 1, 5, "wind", "slide" },
-
-      { "border", 1, 10, "linear" },
-      { "borderangle", 1, 180, "linear", "loop" },
-
-      { "fade", 1, 5, "overshot" },
-
-      { "workspaces", 1, 5, "wind" },
-
-      { "windows", 1, 5, "bounce", "popin" },
-    },
   },
+})
+
+hl.curve("myBezier", {
+  type = "spring",
+  mass = 1,
+  stiffness = 55,
+  dampening = 7,
+})
+
+hl.curve("linear", {
+  type = "bezier",
+  points = {
+    { 0.0, 0.0 },
+    { 1.0, 1.0 },
+  },
+})
+
+hl.curve("wind", {
+  type = "spring",
+  mass = 1,
+  stiffness = 62,
+  dampening = 7,
+})
+
+hl.curve("winIn", {
+  type = "spring",
+  mass = 0.9,
+  stiffness = 78,
+  dampening = 6,
+})
+
+hl.curve("winOut", {
+  type = "bezier",
+  points = {
+    { 0.3, -0.3 },
+    { 0, 1 },
+  },
+})
+
+hl.curve("slow", {
+  type = "spring",
+  mass = 1.2,
+  stiffness = 40,
+  dampening = 9,
+})
+
+hl.curve("overshot", {
+  type = "spring",
+  mass = 0.9,
+  stiffness = 80,
+  dampening = 5,
+})
+
+hl.curve("bounce", {
+  type = "spring",
+  mass = 0.7,
+  stiffness = 105,
+  dampening = 3,
+})
+
+hl.curve("sligshot", {
+  type = "spring",
+  mass = 0.8,
+  stiffness = 120,
+  dampening = 4,
+})
+
+hl.curve("nice", {
+  type = "spring",
+  mass = 0.6,
+  stiffness = 140,
+  dampening = 2,
+})
+
+hl.animation({
+  leaf = "windowsIn",
+  enabled = true,
+  speed = 5,
+  spring = "slow",
+  style = "popin",
+})
+
+hl.animation({
+  leaf = "windowsOut",
+  enabled = true,
+  speed = 5,
+  bezier = "winOut",
+  style = "popin",
+})
+
+hl.animation({
+  leaf = "windowsMove",
+  enabled = true,
+  speed = 5,
+  spring = "wind",
+  style = "slide",
+})
+
+hl.animation({
+  leaf = "border",
+  enabled = true,
+  speed = 10,
+  bezier = "linear",
+})
+
+hl.animation({
+  leaf = "borderangle",
+  enabled = true,
+  speed = 100,
+  bezier = "linear",
+  style = "loop",
+})
+
+hl.animation({
+  leaf = "fade",
+  enabled = true,
+  speed = 5,
+  spring = "overshot",
+})
+
+hl.animation({
+  leaf = "workspaces",
+  enabled = true,
+  speed = 5,
+  spring = "wind",
+  style = "slide",
+})
+
+hl.animation({
+  leaf = "windows",
+  enabled = true,
+  speed = 5,
+  spring = "bounce",
+  style = "popin",
 })

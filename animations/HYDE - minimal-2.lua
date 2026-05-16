@@ -1,17 +1,49 @@
 hl.config({
   animations = {
     enabled = true,
-
-    bezier = {
-      { "quart", 0.25, 1, 0.5, 1 },
-    },
-
-    animation = {
-      { "windows", 1, 6, "quart", "slide" },
-      { "border", 1, 6, "quart" },
-      { "borderangle", 1, 6, "quart" },
-      { "fade", 1, 6, "quart" },
-      { "workspaces", 1, 6, "quart" },
-    },
   },
+})
+
+hl.curve("quart", {
+  type = "spring",
+  mass = 1,
+  stiffness = 58,
+  dampening = 8,
+})
+
+hl.animation({
+  leaf = "windows",
+  enabled = true,
+  speed = 6,
+  spring = "quart",
+  style = "slide",
+})
+
+hl.animation({
+  leaf = "border",
+  enabled = true,
+  speed = 6,
+  spring = "quart",
+})
+
+hl.animation({
+  leaf = "borderangle",
+  enabled = true,
+  speed = 6,
+  spring = "quart",
+})
+
+hl.animation({
+  leaf = "fade",
+  enabled = true,
+  speed = 6,
+  spring = "quart",
+})
+
+hl.animation({
+  leaf = "workspaces",
+  enabled = true,
+  speed = 6,
+  spring = "quart",
+  style = "slide",
 })

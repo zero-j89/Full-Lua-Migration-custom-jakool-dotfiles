@@ -1,20 +1,57 @@
-animations = {
+hl.config({
+  animations = {
+    enabled = true,
+  },
+})
+
+hl.curve("myBezier", {
+  type = "spring",
+  mass = 1,
+  stiffness = 58,
+  dampening = 7,
+})
+
+hl.animation({
+  leaf = "windows",
   enabled = true,
+  speed = 7,
+  spring = "myBezier",
+  style = "slide",
+})
 
-  bezier = {
-    "myBezier",
-    0.05,
-    0.9,
-    0.1,
-    1.05,
-  },
+hl.animation({
+  leaf = "windowsOut",
+  enabled = true,
+  speed = 7,
+  bezier = "default",
+  style = "popin 80%",
+})
 
-  animation = {
-    { "windows", 1, 7, "myBezier" },
-    { "windowsOut", 1, 7, "default", "popin 80%" },
-    { "border", 1, 10, "default" },
-    { "borderangle", 1, 8, "default" },
-    { "fade", 1, 7, "default" },
-    { "workspaces", 1, 6, "default" },
-  },
-}
+hl.animation({
+  leaf = "border",
+  enabled = true,
+  speed = 10,
+  bezier = "default",
+})
+
+hl.animation({
+  leaf = "borderangle",
+  enabled = true,
+  speed = 8,
+  bezier = "default",
+})
+
+hl.animation({
+  leaf = "fade",
+  enabled = true,
+  speed = 7,
+  bezier = "default",
+})
+
+hl.animation({
+  leaf = "workspaces",
+  enabled = true,
+  speed = 6,
+  spring = "myBezier",
+  style = "slide",
+})

@@ -1,22 +1,86 @@
 hl.config({
   animations = {
     enabled = true,
-
-    bezier = {
-      { "overshot", 0.05, 0.9, 0.1, 1.05 },
-      { "smoothOut", 0.5, 0, 0.99, 0.99 },
-      { "smoothIn", 0.5, -0.5, 0.68, 1.5 },
-    },
-
-    animation = {
-      { "windows", 1, 5, "overshot", "slide" },
-      { "windowsOut", 1, 3, "smoothOut" },
-      { "windowsIn", 1, 3, "smoothOut" },
-      { "windowsMove", 1, 4, "smoothIn", "slide" },
-      { "border", 1, 5, "default" },
-      { "fade", 1, 5, "smoothIn" },
-      { "fadeDim", 1, 5, "smoothIn" },
-      { "workspaces", 1, 6, "default" },
-    },
   },
+})
+
+hl.curve("overshot", {
+  type = "spring",
+  mass = 1,
+  stiffness = 68,
+  dampening = 5,
+})
+
+hl.curve("smoothOut", {
+  type = "bezier",
+  points = {
+    { 0.5, 0 },
+    { 0.99, 0.99 },
+  },
+})
+
+hl.curve("smoothIn", {
+  type = "spring",
+  mass = 0.8,
+  stiffness = 85,
+  dampening = 6,
+})
+
+hl.animation({
+  leaf = "windows",
+  enabled = true,
+  speed = 5,
+  spring = "overshot",
+  style = "slide",
+})
+
+hl.animation({
+  leaf = "windowsOut",
+  enabled = true,
+  speed = 3,
+  bezier = "smoothOut",
+})
+
+hl.animation({
+  leaf = "windowsIn",
+  enabled = true,
+  speed = 3,
+  bezier = "smoothOut",
+})
+
+hl.animation({
+  leaf = "windowsMove",
+  enabled = true,
+  speed = 4,
+  spring = "smoothIn",
+  style = "slide",
+})
+
+hl.animation({
+  leaf = "border",
+  enabled = true,
+  speed = 5,
+  bezier = "default",
+})
+
+hl.animation({
+  leaf = "fade",
+  enabled = true,
+  speed = 5,
+  spring = "smoothIn",
+})
+
+hl.animation({
+  leaf = "fadeDim",
+  enabled = true,
+  speed = 5,
+  spring = "smoothIn",
+})
+
+hl.animation({
+  leaf = "workspaces",
+  enabled = true,
+  speed = 6,
+  bezier = "default",
+  style = "slide",
 })

@@ -1,6 +1,23 @@
 hl.config({
+  general = {
+    border_size = 3,
+
+    col = {
+      active_border = "rgb(8A2BE2)",
+      inactive_border = "rgb(1a1a2e)",
+    },
+  },
+
   animations = {
     enabled = true,
+  },
+})
+
+hl.curve("linear", {
+  type = "bezier",
+  points = {
+    { 0, 0 },
+    { 1, 1 },
   },
 })
 
@@ -73,7 +90,17 @@ hl.animation({
 
 hl.animation({
   leaf = "border",
-  enabled = false,
+  enabled = true,
+  speed = 6,
+  bezier = "fluent_decel",
+})
+
+hl.animation({
+  leaf = "borderangle",
+  enabled = true,
+  speed = 60,
+  bezier = "linear",
+  style = "loop",
 })
 
 hl.animation({
