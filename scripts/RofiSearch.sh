@@ -1,47 +1,53 @@
 #!/usr/bin/env bash
-# /* ---- 💫 https://github.com/JaKooLit 💫 ---- */  ##
-# For Searching via web browsers
+# Rofi web search - Lua config compatible
 
-# Define the path to the config file
-config_file=$HOME/.config/hypr/UserConfigs/01-UserDefaults.lua
+config_file="$HOME/.config/hypr/UserConfigs/01-UserDefaults.lua"
+
 if ! command -v jq >/dev/null 2>&1; then
-    notify-send -u low "Rofi Search" "jq is required for URL encoding. Please install jq."
-    exit 1
+  notify-send -u low "Rofi Search" "jq is required for URL encoding. Please install jq."
+  exit 1
 fi
 
-# Check if the config file exists
 if [[ ! -f "$config_file" ]]; then
-    echo "Error: Configuration file not found!"
-    exit 1
+  notify-send -u low "Rofi Search" "Configuration file not found: $config_file"
+  exit 1
 fi
 
-# Process the config file in memory, removing the $ and fixing spaces
-config_content=$(sed 's/\$//g' "$config_file" | sed 's/ = /=/')
+Search_Engine="$(
+  awk -F '"' '
+    /^[[:space:]]*_G\.Search_Engine[[:space:]]*=/ { print $2; exit }
+    /^[[:space:]]*Search_Engine[[:space:]]*=/ { print $2; exit }
+  ' "$config_file"
+)"
 
-# Source the modified content directly from the variable
-eval "$config_content"
-
-# Check if $term is set correctly
 if [[ -z "$Search_Engine" ]]; then
-    echo "Error: \$Search_Engine is not set in the configuration file!"
-    exit 1
+  notify-send -u low "Rofi Search" "Search_Engine is not set in 01-UserDefaults.lua"
+  exit 1
 fi
 
-# Rofi theme and message
 rofi_theme="$HOME/.config/rofi/config-search.rasi"
 msg='‼️ **note** ‼️ search via default web browser'
 
-# Kill Rofi if already running before execution
-if pgrep -x "rofi" >/dev/null; then
-    pkill rofi
+pgrep -x rofi >/dev/null && pkill rofi
+
+query="$(printf '' | rofi -dmenu -config "$rofi_theme" -mesg "$msg")"
+
+[[ -z "$query" ]] && exit 0
+
+encoded_query="$(printf '%s' "$query" | jq -sRr @uri)"
+
+# Supports either:
+# _G.Search_Engine = "https://www.google.com/search?q="
+# OR:
+# _G.Search_Engine = "https://www.google.com/search?q={}"
+# OR:
+# _G.Search_Engine = "https://www.google.com/search?q=%s"
+if [[ "$Search_Engine" == *"{}"* ]]; then
+  url="${Search_Engine/\{\}/$encoded_query}"
+elif [[ "$Search_Engine" == *"%s"* ]]; then
+  url="${Search_Engine/\%s/$encoded_query}"
+else
+  url="${Search_Engine}${encoded_query}"
 fi
 
-# Open Rofi and pass the selected query to xdg-open for the configured search engine
-query=$(printf '' | rofi -dmenu -config "$rofi_theme" -mesg "$msg")
-
-if [[ -z "$query" ]]; then
-    exit 0
-fi
-
-encoded_query=$(printf '%s' "$query" | jq -sRr @uri)
-xdg-open "${Search_Engine}${encoded_query}" >/dev/null 2>&1 &
+xdg-open "$url" >/dev/null 2>&1 &
