@@ -1,35 +1,85 @@
 #!/usr/bin/env bash
-# RainbowBorders.sh - Hyprland Lua-parser compatible border color cycler
+# RainbowBorders.sh - Hyprland Lua-safe border cycler
 #
-# REQUIRED in ~/.config/hypr/hyprland.lua:
+# Requires in ~/.config/hypr/hyprland.lua:
 #   require("RainbowBorderColor")
 #
-# This script writes:
-#   ~/.config/hypr/RainbowBorderColor.lua
-#
-# Stop it:
-#   pkill -f RainbowBorders.sh
-
-EFFECT_TYPE="rainbow"
+# Usage:
+#   RainbowBorders.sh neon
+#   RainbowBorders.sh rainbow
+#   RainbowBorders.sh gradient_flow
+#   RainbowBorders.sh wallust_random
+#   RainbowBorders.sh stop
+#   RainbowBorders.sh reset
 
 HYPR_DIR="$HOME/.config/hypr"
 LUA_OUT="$HYPR_DIR/RainbowBorderColor.lua"
-WALLUST_COLORS_SOURCE="$HYPR_DIR/wallust/wallust-hyprland.conf"
+PIDFILE="/tmp/hypr-rainbow-borders.pid"
+LOGFILE="/tmp/rainbow-borders.log"
 
-INTERVAL="${INTERVAL:-0.8}"
-INACTIVE_COLOR="${INACTIVE_COLOR:-rgb(1a1a2e)}"
+INTERVAL="${INTERVAL:-0.6}"
 BORDER_SIZE="${BORDER_SIZE:-3}"
 
-WALLUST_COLORS=()
+DEFAULT_ACTIVE="${DEFAULT_ACTIVE:-rgb(8A2BE2)}"
+DEFAULT_INACTIVE="${DEFAULT_INACTIVE:-rgb(1a1a2e)}"
 
-LOCKFILE="/tmp/hypr-rainbow-borders.lock"
-exec 9>"$LOCKFILE"
-if ! flock -n 9; then
-  echo "RainbowBorders.sh is already running."
-  exit 0
-fi
+MODE="${1:-neon}"
 
-hex_to_rgb_string() {
+WALLUST_SOURCES=(
+  "$HOME/.config/hypr/wallust/wallust-hyprland.conf"
+  "$HOME/.config/hypr/wallust-hyprland.conf"
+  "$HOME/.config/wallust/colors-hyprland.conf"
+  "$HOME/.cache/wallust/colors-hyprland.conf"
+)
+
+log() {
+  echo "[$(date '+%H:%M:%S')] $*" >> "$LOGFILE"
+}
+
+write_lua_color() {
+  local active_color="$1"
+  local inactive_color="${2:-$DEFAULT_INACTIVE}"
+
+  mkdir -p "$HYPR_DIR"
+
+  cat > "$LUA_OUT" <<EOF
+hl.config({
+  general = {
+    border_size = $BORDER_SIZE,
+    col = {
+      active_border = "$active_color",
+      inactive_border = "$inactive_color",
+    },
+  },
+})
+EOF
+}
+
+reload_hypr() {
+  hyprctl reload >/dev/null 2>&1 || true
+}
+
+reset_border() {
+  log "reset border to $DEFAULT_ACTIVE"
+  write_lua_color "$DEFAULT_ACTIVE" "$DEFAULT_INACTIVE"
+  reload_hypr
+}
+
+stop_running() {
+  if [ -f "$PIDFILE" ]; then
+    old_pid="$(cat "$PIDFILE" 2>/dev/null)"
+    if [ -n "$old_pid" ] && kill -0 "$old_pid" 2>/dev/null; then
+      log "stopping pid $old_pid"
+      kill "$old_pid" 2>/dev/null || true
+      sleep 0.2
+    fi
+    rm -f "$PIDFILE"
+  fi
+
+  pkill -f "RainbowBorders.sh --loop" 2>/dev/null || true
+}
+
+to_rgb() {
   local c="$1"
 
   c="${c#0x}"
@@ -51,39 +101,28 @@ random_rgb() {
   echo "rgb($(openssl rand -hex 3))"
 }
 
-write_lua_color() {
-  local active_color="$1"
-  local inactive_color="${2:-$INACTIVE_COLOR}"
-
-  cat > "$LUA_OUT" <<EOF
-hl.config({
-  general = {
-    border_size = $BORDER_SIZE,
-
-    col = {
-      active_border = "$active_color",
-      inactive_border = "$inactive_color",
-    },
-  },
-})
-EOF
-}
-
-apply_color() {
-  local active_color="$1"
-  write_lua_color "$active_color" "$INACTIVE_COLOR"
-  hyprctl reload >/dev/null 2>&1 || true
-}
+WALLUST_COLORS=()
 
 load_wallust_colors() {
   WALLUST_COLORS=()
 
-  if [ ! -f "$WALLUST_COLORS_SOURCE" ]; then
+  local src=""
+  for f in "${WALLUST_SOURCES[@]}"; do
+    if [ -f "$f" ]; then
+      src="$f"
+      break
+    fi
+  done
+
+  if [ -z "$src" ]; then
+    log "no wallust file found"
     return
   fi
 
+  log "loading wallust colors from $src"
+
   mapfile -t WALLUST_COLORS < <(
-    grep -E '^\$color[0-9]+' "$WALLUST_COLORS_SOURCE" | awk '
+    grep -E '^\$color[0-9]+' "$src" | awk '
       function hex2(s){ return (length(s)==6 ? "0xff"s : ""); }
       function rgb2(r,g,b){ return sprintf("0xff%02x%02x%02x", r, g, b); }
       {
@@ -94,6 +133,8 @@ load_wallust_colors() {
         }
       }'
   )
+
+  log "loaded ${#WALLUST_COLORS[@]} wallust colors"
 }
 
 wallust_random_color() {
@@ -104,45 +145,37 @@ wallust_random_color() {
   fi
 }
 
-MAX_POS=10
-GLOW_POS=0
+NEON_COLORS=(
+  "rgb(8A2BE2)"
+  "rgb(00D4FF)"
+)
 
-gradient_flow_color() {
-  local pos="$1"
-
-  if [ "${#WALLUST_COLORS[@]}" -lt 16 ]; then
-    echo "0xff$(openssl rand -hex 3)"
-    return
-  fi
-
-  local base="${WALLUST_COLORS[10]}"
-  local grad1="${WALLUST_COLORS[14]}"
-  local grad2="${WALLUST_COLORS[13]}"
-  local glow="${WALLUST_COLORS[15]}"
-
-  local d=$((pos - GLOW_POS))
-
-  if (( d > MAX_POS / 2 )); then d=$((d - MAX_POS)); fi
-  if (( d < -MAX_POS / 2 )); then d=$((d + MAX_POS)); fi
-
-  case "${d#-}" in
-    0) echo "$glow" ;;
-    1) echo "$grad1" ;;
-    2) echo "$grad2" ;;
-    *) echo "$base" ;;
-  esac
-}
+FLOW_COLORS=(
+  "rgb(2a2a2a)"
+  "rgb(5a5a5a)"
+  "rgb(8a8a8a)"
+  "rgb(d0d0d0)"
+  "rgb(8a8a8a)"
+  "rgb(5a5a5a)"
+)
 
 next_color() {
-  case "$EFFECT_TYPE" in
-    wallust_random)
-      hex_to_rgb_string "$(wallust_random_color)"
+  local mode="$1"
+  local idx="$2"
+
+  case "$mode" in
+    neon|neon_purple_blue)
+      echo "${NEON_COLORS[$((idx % ${#NEON_COLORS[@]}))]}"
       ;;
     gradient_flow)
-      local c
-      c="$(gradient_flow_color "$GLOW_POS")"
-      GLOW_POS=$(( (GLOW_POS + 1) % MAX_POS ))
-      hex_to_rgb_string "$c"
+      if [ "${#WALLUST_COLORS[@]}" -gt 0 ]; then
+        to_rgb "${WALLUST_COLORS[$((idx % ${#WALLUST_COLORS[@]}))]}"
+      else
+        echo "${FLOW_COLORS[$((idx % ${#FLOW_COLORS[@]}))]}"
+      fi
+      ;;
+    wallust_random)
+      to_rgb "$(wallust_random_color)"
       ;;
     rainbow|*)
       random_rgb
@@ -150,15 +183,52 @@ next_color() {
   esac
 }
 
-mkdir -p "$HYPR_DIR"
-load_wallust_colors
+loop_main() {
+  local mode="$1"
+  local idx=0
 
-if [ ! -f "$LUA_OUT" ]; then
-  write_lua_color "rgb(8A2BE2)" "$INACTIVE_COLOR"
-fi
+  : > "$LOGFILE"
+  log "loop started mode=$mode interval=$INTERVAL"
 
-while true; do
-  active_color="$(next_color)"
-  apply_color "$active_color"
-  sleep "$INTERVAL"
-done
+  load_wallust_colors
+
+  while true; do
+    color="$(next_color "$mode" "$idx")"
+    log "idx=$idx color=$color"
+    write_lua_color "$color" "$DEFAULT_INACTIVE"
+    reload_hypr
+
+    idx=$((idx + 1))
+    sleep "$INTERVAL"
+  done
+}
+
+case "$MODE" in
+  stop)
+    stop_running
+    reset_border
+    log "stopped"
+    exit 0
+    ;;
+  reset)
+    reset_border
+    log "reset only"
+    exit 0
+    ;;
+  --loop)
+    loop_main "${2:-neon}"
+    exit 0
+    ;;
+  neon|neon_purple_blue|rainbow|gradient_flow|wallust_random)
+    stop_running
+    reset_border
+    bash "$0" --loop "$MODE" >/dev/null 2>&1 &
+    echo $! > "$PIDFILE"
+    log "started mode=$MODE pid=$(cat "$PIDFILE")"
+    exit 0
+    ;;
+  *)
+    echo "Usage: $0 {neon|rainbow|gradient_flow|wallust_random|stop|reset}"
+    exit 1
+    ;;
+esac
