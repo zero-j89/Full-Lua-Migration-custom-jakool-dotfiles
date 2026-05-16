@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# RainbowBorders.sh - Hyprland Lua-safe border cycler
+# RainbowBorders.sh - Hyprland Lua-safe border color cycler
 #
 # Requires in ~/.config/hypr/hyprland.lua:
 #   require("RainbowBorderColor")
@@ -11,13 +11,19 @@
 #   RainbowBorders.sh wallust_random
 #   RainbowBorders.sh stop
 #   RainbowBorders.sh reset
+#   RainbowBorders.sh restore
+#
+# Persists last selected mode in:
+#   ~/.config/hypr/UserConfigs/RainbowBordersMode
 
 HYPR_DIR="$HOME/.config/hypr"
+USER_CONFIGS="$HYPR_DIR/UserConfigs"
+STATE_FILE="$USER_CONFIGS/RainbowBordersMode"
 LUA_OUT="$HYPR_DIR/RainbowBorderColor.lua"
 PIDFILE="/tmp/hypr-rainbow-borders.pid"
 LOGFILE="/tmp/rainbow-borders.log"
 
-INTERVAL="${INTERVAL:-0.6}"
+INTERVAL="${INTERVAL:-0.55}"
 BORDER_SIZE="${BORDER_SIZE:-3}"
 
 DEFAULT_ACTIVE="${DEFAULT_ACTIVE:-rgb(8A2BE2)}"
@@ -32,15 +38,19 @@ WALLUST_SOURCES=(
   "$HOME/.cache/wallust/colors-hyprland.conf"
 )
 
+mkdir -p "$HYPR_DIR" "$USER_CONFIGS"
+
 log() {
   echo "[$(date '+%H:%M:%S')] $*" >> "$LOGFILE"
+}
+
+save_mode() {
+  echo "$1" > "$STATE_FILE"
 }
 
 write_lua_color() {
   local active_color="$1"
   local inactive_color="${2:-$DEFAULT_INACTIVE}"
-
-  mkdir -p "$HYPR_DIR"
 
   cat > "$LUA_OUT" <<EOF
 hl.config({
@@ -146,25 +156,29 @@ wallust_random_color() {
 }
 
 NEON_COLORS=(
-  "rgb(8A2BE2)"  # blueviolet
-  "rgb(00D4FF)"  # cyan neon
-  "rgb(FF00FF)"  # magenta
-  "rgb(7DF9FF)"  # electric blue
-  "rgb(B026FF)"  # neon purple
-  "rgb(00FFFF)"  # aqua
-  "rgb(6A00FF)"  # deep neon violet
-  "rgb(FF44CC)"  # synth pink
-  "rgb(00BFFF)"  # deep sky blue
-  "rgb(CF00FF)"  # ultra purple
+  "rgb(8A2BE2)"
+  "rgb(6A00FF)"
+  "rgb(B026FF)"
+  "rgb(FF00FF)"
+  "rgb(FF44CC)"
+  "rgb(CF00FF)"
+  "rgb(7DF9FF)"
+  "rgb(00D4FF)"
+  "rgb(00BFFF)"
+  "rgb(00FFFF)"
 )
 
 FLOW_COLORS=(
-  "rgb(2a2a2a)"
-  "rgb(5a5a5a)"
-  "rgb(8a8a8a)"
-  "rgb(d0d0d0)"
-  "rgb(8a8a8a)"
-  "rgb(5a5a5a)"
+  "rgb(120018)"
+  "rgb(4b0082)"
+  "rgb(8A2BE2)"
+  "rgb(B026FF)"
+  "rgb(00D4FF)"
+  "rgb(7DF9FF)"
+  "rgb(00D4FF)"
+  "rgb(B026FF)"
+  "rgb(8A2BE2)"
+  "rgb(4b0082)"
 )
 
 next_color() {
@@ -215,12 +229,14 @@ case "$MODE" in
   stop)
     stop_running
     reset_border
-    log "stopped"
+    save_mode "disabled"
+    log "stopped and saved disabled"
     exit 0
     ;;
   reset)
     reset_border
-    log "reset only"
+    save_mode "disabled"
+    log "reset only and saved disabled"
     exit 0
     ;;
   --loop)
@@ -230,13 +246,23 @@ case "$MODE" in
   neon|neon_purple_blue|rainbow|gradient_flow|wallust_random)
     stop_running
     reset_border
+    save_mode "$MODE"
     bash "$0" --loop "$MODE" >/dev/null 2>&1 &
     echo $! > "$PIDFILE"
     log "started mode=$MODE pid=$(cat "$PIDFILE")"
     exit 0
     ;;
+  restore)
+    saved="$(cat "$STATE_FILE" 2>/dev/null || echo disabled)"
+    if [ "$saved" != "disabled" ] && [ -n "$saved" ]; then
+      "$0" "$saved"
+    else
+      reset_border
+    fi
+    exit 0
+    ;;
   *)
-    echo "Usage: $0 {neon|rainbow|gradient_flow|wallust_random|stop|reset}"
+    echo "Usage: $0 {neon|rainbow|gradient_flow|wallust_random|stop|reset|restore}"
     exit 1
     ;;
 esac
