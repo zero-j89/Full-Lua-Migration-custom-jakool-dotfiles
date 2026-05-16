@@ -59,8 +59,8 @@ require("wallust-hyprland")
 require("UserDecorations")
 
 -- Load only if the file exists.
+-- require("00-default")
 require("UserAnimations")
-require("00-default")
 
 require("WindowRules")
 
@@ -69,3 +69,5 @@ require("UserKeybinds")
 
 require("monitors")
 require("workspaces")
+require("RainbowBorderColor")
+
