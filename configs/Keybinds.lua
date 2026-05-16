@@ -60,12 +60,13 @@ b(mainMod .. " + ALT", "V", exec(sh("$scriptsDir/ClipManager.sh")), "clipboard m
 b(mainMod, "X", exec("qs -p ~/.config/quickshell-noctalia ipc call plugin:clipper toggle"), "Toggle Clipper")
 -- b(mainMod .. " + CTRL", "R", exec(sh("$scriptsDir/RofiThemeSelector.sh")), "rofi theme selector")
 -- b(mainMod .. " + CTRL + SHIFT", "R", exec(sh("pkill rofi || true && $scriptsDir/RofiThemeSelector-modified.sh")), "rofi theme selector modified")
+b(mainMod .. " + CTRL", "A", exec(sh("$scriptsDir/Animations.sh")), "Animations Selector")
 
 b(mainMod .. " + SHIFT", "F", dispatch("fullscreen"), "fullscreen")
 b(mainMod .. " + CTRL", "F", dispatch("fullscreen 1"), "maximize window")
 -- b(mainMod .. " + SHIFT", "Return", exec(sh("$scriptsDir/Dropterminal.sh " .. term)), "DropDown terminal")
 b(mainMod, "SPACE", hl.dsp.window.float(), "Float current window")
--- b(mainMod .. " + ALT", "SPACE", hl.dsp.workspace.toggle_all_float(), "Float all windows")
+b(mainMod .. " + ALT", "SPACE", hl.dsp.window.float(), "Float all windows")
 b(mainMod .. " + SHIFT", "Return",
   hl.dsp.exec_cmd(dropterm),
   "DropDown terminal"
