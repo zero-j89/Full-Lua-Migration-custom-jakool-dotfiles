@@ -96,7 +96,7 @@ rainbow_borders_menu() {
 
 menu() {
     cat <<EOF
---- USED SCRIPTS ---
+--- USER SCRIPTS ---
 Edit User Defaults
 Edit User Keybinds
 Edit System Default Keybinds
