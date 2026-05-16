@@ -12,7 +12,7 @@ so you can see a little of it. I really hope this finds you well and helps someo
 
 
 
-5/15/2026 Edit: fixed all move window/resize/etc plus drop terminal script and bind. Also fixed desktop zoom and dropdown terminal both in /scipts and in its depends. Animations will be uplaoded shortly.
+5/15/2026 Edit: fixed all move window/resize/etc plus drop terminal script and bind. Also fixed desktop zoom and dropdown terminal both in /scipts and in its depends. Animations are done and rainbowborders are working.
  <img width="2561" height="1441" alt="Screenshot_14-May_13-51-28_9486" src="https://github.com/user-attachments/assets/22e3ece1-1803-4a05-a1d3-edda018b39c3" />
 <img width="2560" height="1441" alt="Screenshot_14-May_13-50-24_18725" src="https://github.com/user-attachments/assets/fe953196-784d-4111-aa9c-3ca68d144596" />
 <img width="2560" height="1441" alt="Screenshot_14-May_13-50-32_22230" src="https://github.com/user-attachments/assets/41495710-5e28-46a1-8ea6-524570b4eb98" />
