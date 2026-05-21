@@ -65,6 +65,7 @@ b(mainMod .. " + CTRL", "A", exec(sh("$scriptsDir/Animations.sh")), "Animations 
 b(mainMod .. " + SHIFT", "F", dispatch("fullscreen"), "fullscreen")
 b(mainMod .. " + CTRL", "F", dispatch("fullscreen 1"), "maximize window")
 -- b(mainMod .. " + SHIFT", "Return", exec(sh("$scriptsDir/Dropterminal.sh " .. term)), "DropDown terminal")
+
 b(mainMod, "SPACE", hl.dsp.window.float(), "Float current window")
 b(mainMod .. " + ALT", "SPACE", hl.dsp.window.float(), "Float all windows")
 b(mainMod .. " + SHIFT", "Return",
@@ -114,12 +115,11 @@ b(mainMod .. " + SHIFT", "E", exec(sh("$scriptsDir/Kool_Quick_Settings.sh")), "Q
 -- Dwindle layout
 b(mainMod, "P", hl.dsp.window.pseudo(), "toggle pseudo dwindle")
 
-
-
 -- Layout-aware init
 hl.on("hyprland.start", function()
-  hl.exec_cmd(sh("$scriptsDir/ChangeLayout.sh init"))
+  hl.exec_cmd(os.getenv("HOME") .. "/.config/hypr/scripts/ChangeLayout.sh init")
 end)
+
 
 -- Cycle windows
 b("ALT", "Tab", function()
