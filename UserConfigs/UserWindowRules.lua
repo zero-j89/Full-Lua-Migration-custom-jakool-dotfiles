@@ -1,7 +1,3 @@
-local function wr(rule)
-  hl.window_rule(rule)
-end
-
 -- Steam main client/library on workspace 5
 wr({
   name = "steam-main-workspace-5",
@@ -12,8 +8,9 @@ wr({
   workspace = "5 silent",
   float = true,
   size = "1280 800",
-  move = "1264 625",
+  center = true,
 })
+
 -- Steam child dialogs/popups stay floating, centered
 wr({
   name = "steam-popups-float",
