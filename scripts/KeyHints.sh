@@ -16,7 +16,7 @@ fi
 # Launch yad with calculated width and height
 GDK_BACKEND=$BACKEND yad \
     --center \
-    --title="KooL Quick Cheat Sheet" \
+    --title="GZML Quick Cheat Sheet" \
     --no-buttons \
     --list \
     --column=Key: \

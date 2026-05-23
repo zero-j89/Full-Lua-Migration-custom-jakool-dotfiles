@@ -22,8 +22,8 @@ wr({ match = { class = "^(zen-alpha|zen)$" }, tag = "+browser" })
 wr({ match = { class = "^(swaync-control-center|swaync-notification-window|swaync-client|class)$" }, tag = "+notif" })
 
 -- KooL settings tag
-wr({ match = { title = "^(KooL Quick Cheat Sheet)$" }, tag = "+KooL_Cheat" })
-wr({ match = { title = "^(KooL Hyprland Settings)$" }, tag = "+KooL_Settings" })
+wr({ match = { title = "^(GZML Quick Cheat Sheet)$" }, tag = "+GZML_Cheat" })
+wr({ match = { title = "^(gzml quick settings)$" }, tag = "+gzml_settings" })
 wr({ match = { class = "^(nwg-displays|nwg-look)$" }, tag = "+KooL-Settings" })
 
 -- terminal tags
@@ -101,7 +101,7 @@ wr({ match = { tag = "multimedia" }, no_blur = true })
 wr({ match = { tag = "multimedia" }, opacity = "1.0" })
 
 -- POSITION
-wr({ match = { tag = "KooL_Cheat" }, center = true })
+wr({ match = { tag = "GZML_Cheat" }, center = true })
 wr({ match = { tag = "KooL-Settings" }, center = true })
 wr({ match = { title = "^(ROG Control)$" }, center = true })
 wr({ match = { title = "^(Keybindings)$" }, center = true })
@@ -115,7 +115,7 @@ wr({ match = { class = "^(.*)$" }, idle_inhibit = "fullscreen" })
 wr({ match = { title = "^(.*)$" }, idle_inhibit = "fullscreen" })
 
 -- FLOAT
-wr({ match = { tag = "KooL_Cheat" }, float = true })
+wr({ match = { tag = "GZML_Cheat" }, float = true })
 wr({ match = { tag = "wallpaper" }, float = true, center = true })
 wr({ match = { tag = "settings" }, float = true, center = true })
 wr({ match = { tag = "viewer" }, float = true, center = true })
@@ -154,7 +154,7 @@ wr({ match = { class = "^(seahorse)$" }, opacity = "0.9 0.8" })
 wr({ match = { title = "^(Picture-in-Picture)$" }, opacity = "0.95 0.75" })
 
 -- SIZE
-wr({ match = { tag = "KooL_Cheat" }, size = "(monitor_w*0.65) (monitor_h*0.9)" })
+wr({ match = { tag = "GZML_Cheat" }, size = "(monitor_w*0.65) (monitor_h*0.9)" })
 wr({ match = { tag = "wallpaper" }, size = "(monitor_w*0.7) (monitor_h*0.7)" })
 wr({ match = { tag = "settings" }, size = "(monitor_w*0.7) (monitor_h*0.7)" })
 wr({ match = { class = "^([Ff]erdium)$" }, size = "(monitor_w*0.6) (monitor_h*0.7)" })

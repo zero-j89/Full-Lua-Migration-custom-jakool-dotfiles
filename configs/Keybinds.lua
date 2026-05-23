@@ -104,7 +104,7 @@ b(mainMod, "Q", hl.dsp.window.close(), "close active window")
 b(mainMod .. " + SHIFT", "Q", exec(sh("$scriptsDir/KillActiveProcess.sh")), "Terminate active process")
 b("CTRL + ALT", "L", exec("qs -p ~/.config/quickshell-noctalia ipc call lockScreen lock"))
 b("CTRL + ALT", "P", exec(sh("$scriptsDir/Wlogout.sh")), "powermenu")
-b(mainMod .. " + SHIFT", "E", exec(sh("$scriptsDir/Kool_Quick_Settings.sh")), "Quick settings menu")
+b(mainMod .. " + SHIFT", "E", exec(sh("$scriptsDir/gzml_quick_settings.sh")), "gzml quick settings menu")
 
 
 

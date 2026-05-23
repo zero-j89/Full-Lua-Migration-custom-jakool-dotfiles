@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# /* ---- 💫 https://github.com/JaKooLit 💫 ---- */  ##
-# For applying Animations from different users
+# For applying Animations from different users fixed by gzpt
 
-# Check if rofi is already running
-if pidof rofi > /dev/null; then
+# Only close existing rofi, then give it a moment before opening this menu
+if pidof rofi >/dev/null; then
   pkill rofi
+  sleep 0.15
 fi
 
 # Variables
