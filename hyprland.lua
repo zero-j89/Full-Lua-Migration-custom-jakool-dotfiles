@@ -74,3 +74,8 @@ require("monitors")
 require("workspaces")
 require("RainbowBorderColor")
 
+
+-- This loads Noctalia-generated Hyprland colors.
+
+-- This loads Noctalia-generated Hyprland colors.
+dofile("/home/zer0/.config/hypr/noctalia/noctalia-colors.lua")
