@@ -1,245 +1,179 @@
 #!/usr/bin/env python3
+
+#GZML remake
 import sys
 import re
 import os
 
-def normalize_combo(combo):
-    return combo.replace(" ", "").replace("\t", "")
+MOD_REPLACEMENTS = {
+    "mainMod": "SUPER",
+    "$mainMod": "SUPER",
+}
 
-def extract_combo(line):
-    # Remove comments and whitespace
-    line = re.sub(r'\s*#.*$', '', line).strip()
-    
-    if '=' not in line:
+def split_top_level_args(s):
+    args = []
+    cur = []
+    depth = 0
+    quote = None
+    i = 0
+
+    while i < len(s):
+        c = s[i]
+
+        if quote:
+            cur.append(c)
+            if c == "\\" and i + 1 < len(s):
+                i += 1
+                cur.append(s[i])
+            elif quote == "]]" and s[i:i+2] == "]]":
+                quote = None
+            elif c == quote:
+                quote = None
+            i += 1
+            continue
+
+        if s[i:i+2] == "[[":
+            quote = "]]"
+            cur.append("[[")
+            i += 2
+            continue
+
+        if c in ("'", '"'):
+            quote = c
+            cur.append(c)
+        elif c == "(":
+            depth += 1
+            cur.append(c)
+        elif c == ")":
+            depth -= 1
+            cur.append(c)
+        elif c == "," and depth == 0:
+            args.append("".join(cur).strip())
+            cur = []
+        else:
+            cur.append(c)
+
+        i += 1
+
+    if cur:
+        args.append("".join(cur).strip())
+
+    return args
+
+def clean_lua_string(s):
+    s = s.strip()
+
+    if s.startswith("[[") and s.endswith("]]"):
+        return s[2:-2]
+
+    if len(s) >= 2 and s[0] in ("'", '"') and s[-1] == s[0]:
+        return s[1:-1]
+
+    return s
+
+def normalize_mods(mods):
+    mods = mods.replace("..", "+")
+    mods = clean_lua_string(mods)
+
+    for k, v in MOD_REPLACEMENTS.items():
+        mods = re.sub(rf"\b{re.escape(k)}\b", v, mods)
+
+    mods = mods.replace('"', "").replace("'", "")
+    mods = mods.replace("+", " + ")
+    mods = re.sub(r"\s+", " ", mods).strip()
+    mods = mods.replace(" + ", "+")
+
+    return mods
+
+def parse_lua_bind(line):
+    line = line.strip()
+
+    if line.startswith("--"):
         return None
-        
-    try:
-        rhs = line.split('=', 1)[1]
-        parts = [p.strip() for p in rhs.split(',')]
-        if len(parts) < 2:
-            return None
-            
-        mods = parts[0]
-        key = parts[1]
-        return f"{mods},{key}"
-    except Exception:
+
+    m = re.match(r'^\s*b\((.*)\)\s*,?\s*$', line)
+    if not m:
         return None
 
-def parse_files(files):
-    # Data structures to match original logic
-    binding_map = {}        # combo -> effective line
-    source_map = {}         # combo -> source file
-    user_bind_map = {}      # combo -> user bind line
-    unbound_user = {}       # combo -> True if explicitly unbound in user file
-    seen_any_bind = {}      # combo -> True if seen
-    default_seen = {}       # combo -> True if default bind exists
-    
-    # We assume the last file in the list is the user config (UserKeybinds.conf)
-    # This matches the bash script logic where user_keybinds_conf is passed last
-    if not files:
-        return [], []
-        
-    user_conf_path = files[-1] if len(files) > 1 else None
+    args = split_top_level_args(m.group(1))
 
-    for file_path in files:
-        if not os.path.exists(file_path):
-            continue
-            
-        try:
-            with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
-                for line in f:
-                    line = line.rstrip('\n')
-                    if not line or line.strip().startswith('#'):
-                        continue
-                        
-                    is_bind = re.match(r'^\s*bind[a-z]*\s*=', line)
-                    is_unbind = re.match(r'^\s*unbind\s*=', line)
-                    
-                    if is_bind:
-                        combo_raw = extract_combo(line)
-                        if not combo_raw:
-                            continue
-                        combo = normalize_combo(combo_raw)
-                        seen_any_bind[combo] = True
-                        
-                        is_user_file = (file_path == user_conf_path)
-                        
-                        if not is_user_file:
-                            default_seen[combo] = True
-                            
-                        # prefer user bind, else first seen
-                        if combo not in source_map:
-                            binding_map[combo] = line
-                            source_map[combo] = file_path
-                            
-                        if is_user_file:
-                            user_bind_map[combo] = line
-                            binding_map[combo] = line
-                            source_map[combo] = file_path
-                            
-                    elif is_unbind:
-                        combo_raw = extract_combo(line)
-                        if not combo_raw:
-                            continue
-                        combo = normalize_combo(combo_raw)
-                        
-                        if file_path == user_conf_path:
-                            unbound_user[combo] = True
-                            
-                        # If unbind is found, we should remove the bind from our map
-                        # so it doesn't show up in the menu.
-                        if combo in binding_map:
-                            del binding_map[combo]
-                        if combo in source_map:
-                            del source_map[combo]
-                            
-        except Exception as e:
-            # Silently ignore read errors to mimic bash behavior or log to stderr
-            sys.stderr.write(f"Error reading {file_path}: {e}\n")
-            continue
+    if len(args) < 4:
+        return None
 
-    # Build results
-    raw_keybinds = []
-    missing_unbind_suggestions = []
-    
-    for combo in seen_any_bind:
-        eff_line = binding_map.get(combo)
-        src = source_map.get(combo)
-        
-        if not eff_line:
-            continue
-            
-        raw_keybinds.append(eff_line)
-        
-        # Check for missing unbind suggestions
-        # If user overrides a default but didn't unbind in user file
-        if (src == user_conf_path and 
-            combo in default_seen and 
-            combo not in unbound_user):
-            
-            # Create suggestion: replace 'bind' with 'unbind'
-            suggest = re.sub(r'^\s*bind[a-z]*', 'unbind', eff_line)
-            missing_unbind_suggestions.append(suggest)
-            
-    return raw_keybinds, missing_unbind_suggestions
+    mods = normalize_mods(args[0])
+    key = clean_lua_string(args[1])
+    action = args[2].strip()
+    desc = clean_lua_string(args[3])
 
-def format_for_rofi(raw_binds):
-    formatted_lines = []
-    
-    for line in raw_binds:
-        # line is like "bind = MODS, KEY, DISPATCHER, PARAMS" or "bindd = ..."
-        # Parsing logic from awk script:
-        
-        # 1. Cleaner binder
-        match = re.match(r'^\s*(bind[a-z]*)\s*=(.*)', line)
-        if not match:
-            continue
-            
-        binder = match.group(1).replace(" ", "").replace("\t", "")
-        rhs = match.group(2).strip()
-        
-        # "bind" ends in d, but doesn't have a description. "bindd" does.
-        # Original script logic `index(binder, "d")>0` was likely buggy for "bind".
-        # We'll assume strict check for bindd or similar if needed, 
-        # but avoiding "bind" having a description is crucial for correct output.
-        has_desc = 'd' in binder and binder != 'bind'
+    combo = f"{mods}+{key}" if mods else key
+    combo = combo.replace("++", "+")
 
-        # Split by comma regex (handling spaces)
-        parts = [p.strip() for p in rhs.split(',')]
-        
-        if len(parts) < 2:
-            continue
-            
-        mods = parts[0]
-        key = parts[1]
-        
-        desc = ""
-        dispatcher = ""
-        params = ""
-        
-        start_idx = 0
-        
-        if has_desc:
-            desc = parts[2] if len(parts) >= 3 else ""
-            dispatcher = parts[3] if len(parts) >= 4 else ""
-            start_idx = 4
-        else:
-            dispatcher = parts[2] if len(parts) >= 3 else ""
-            start_idx = 3
-            
-        # Collect params
-        remaining_parts = []
-        if start_idx < len(parts):
-            for i in range(start_idx, len(parts)):
-                if parts[i]:
-                    remaining_parts.append(parts[i])
-        
-        if remaining_parts:
-            params = ", ".join(remaining_parts)
-            
-        # Formatting mods
-        mods = mods.replace("$mainMod", "SUPER")
-        mods = re.sub(r'[ \t]+', '+', mods)
-        
-        # Build combo string
-        if mods and key:
-            combo_str = f"{mods}+{key}"
-        elif key:
-            combo_str = key
-        else:
-            combo_str = mods
-            
-        # Final Print Format
-        if has_desc and desc:
-            formatted_lines.append(f"{combo_str} — {desc}")
-        elif dispatcher:
-            if params:
-                formatted_lines.append(f"{combo_str} — {dispatcher} {params}")
-            else:
-                formatted_lines.append(f"{combo_str} — {dispatcher}")
-        else:
-            formatted_lines.append(combo_str)
-            
-    return formatted_lines
+    if desc:
+        return f"{combo} — {desc}"
+
+    return f"{combo} — {action}"
+
+def parse_conf_bind(line):
+    line = line.strip()
+
+    if line.startswith("#"):
+        return None
+
+    m = re.match(r'^\s*(bind[a-z]*)\s*=\s*(.*)', line)
+    if not m:
+        return None
+
+    binder = m.group(1)
+    rhs = m.group(2)
+    parts = [p.strip() for p in rhs.split(",")]
+
+    if len(parts) < 3:
+        return None
+
+    has_desc = binder != "bind" and "d" in binder
+
+    mods = parts[0].replace("$mainMod", "SUPER").replace(" ", "+")
+    key = parts[1]
+
+    if has_desc and len(parts) >= 4:
+        desc = parts[2]
+        return f"{mods}+{key} — {desc}"
+
+    dispatcher = parts[2]
+    params = ", ".join(parts[3:]) if len(parts) > 3 else ""
+
+    return f"{mods}+{key} — {dispatcher} {params}".strip()
+
+def parse_file(path):
+    out = []
+
+    if not os.path.exists(path):
+        return out
+
+    with open(path, "r", encoding="utf-8", errors="ignore") as f:
+        for line in f:
+            parsed = parse_lua_bind(line) or parse_conf_bind(line)
+            if parsed:
+                out.append(parsed)
+
+    return out
 
 def main():
-    if len(sys.argv) < 2:
-        # No files provided
-        sys.exit(0)
-        
-    config_files = sys.argv[1:]
-    
-    binds, suggestions = parse_files(config_files)
-    
-    if not binds:
+    files = sys.argv[1:]
+    results = []
+
+    for path in files:
+        results.extend(parse_file(path))
+
+    if not results:
         print("no keybinds found.")
         sys.exit(1)
-        
-    formatted = format_for_rofi(binds)
-    
-    for line in formatted:
-        print(line)
-        
-    # Handle suggestions (print to stderr or a specific file if needed, 
-    # but the original script assigns it to a variable 'msg'.
-    # To pass this back to bash, we might need a separate mechanism or just print to a known file.)
-    if suggestions:
-        import tempfile
-        try:
-            with tempfile.NamedTemporaryFile(mode='w', delete=False, prefix='hypr-unbind-suggestions-', suffix='.conf') as tf:
-                tf.write('\n'.join(suggestions) + '\n')
-                # We print a special marker line to stdout that the bash script can capture?
-                # Or better, just print to stderr and let the user ignore it, 
-                # OR, since the original script specifically puts it in the Rofi message,
-                # we can print a special string at the END of stdout or to a side channel.
-                
-                # Let's decide to print the valid keybinds to stdout (for rofi).
-                # And print the suggestion file path to a known location or specific fd if possible.
-                # Simplest: Write to a fixed temp file location that the bash script checks.
-                with open("/tmp/hypr_keybind_suggestions_file", "w") as sf:
-                    sf.write(tf.name)
-        except Exception:
-            pass
+
+    seen = set()
+    for line in results:
+        if line not in seen:
+            print(line)
+            seen.add(line)
 
 if __name__ == "__main__":
     main()
