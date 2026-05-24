@@ -58,7 +58,7 @@ b(mainMod .. " + SHIFT", "G", exec([[sh -c "qs -p ~/.config/quickshell-noctalia 
 b(mainMod .. " + ALT", "L", exec(sh("$scriptsDir/ChangeLayout.sh")), "toggle master/dwindle layout")
 b(mainMod .. " + ALT", "V", exec(sh("$scriptsDir/ClipManager.sh")), "clipboard manager")
 b(mainMod, "X", exec("qs -p ~/.config/quickshell-noctalia ipc call plugin:clipper toggle"), "Toggle Clipper")
--- b(mainMod .. " + CTRL", "R", exec(sh("$scriptsDir/RofiThemeSelector.sh")), "rofi theme selector")
+b(mainMod .. " + CTRL", "R", exec(sh("$scriptsDir/RofiThemeSelector.sh")), "rofi theme selector")
 -- b(mainMod .. " + CTRL + SHIFT", "R", exec(sh("pkill rofi || true && $scriptsDir/RofiThemeSelector-modified.sh")), "rofi theme selector modified")
 b(mainMod .. " + CTRL", "A", exec(sh("$scriptsDir/Animations.sh")), "Animations Selector")
 
@@ -177,7 +177,7 @@ b(mainMod, "G", hl.dsp.group.toggle({}), "toggle group")
 b(mainMod, "Tab", hl.dsp.group.next({}), "Change Group Forward")
 b(mainMod .. " + CTRL", "Tab", dispatch("changegroupactive"), "change active in group")
 b(mainMod .. " + SHIFT", "Tab", hl.dsp.group.prev({}), "Change Group Back")
-
+-- zinth
 b(mainMod .. " + CTRL", "K", hl.dsp.window.move({ into_group = "l" }), "Move left into group")
 b(mainMod .. " + CTRL", "L", hl.dsp.window.move({ into_group = "r" }), "Move right into group")
 b(mainMod .. " + CTRL", "H", hl.dsp.window.move({ out_of_group = true }), "Move active out of group")
@@ -217,7 +217,7 @@ b(mainMod, "mouse_up", hl.dsp.focus({ workspace = "e-1" }), "previous workspace"
 b(mainMod, "period", hl.dsp.focus({ workspace = "e+1" }), "next workspace")
 b(mainMod, "comma", hl.dsp.focus({ workspace = "e-1" }), "previous workspace")
 
-
+-- main
 -- Mouse move / resize
 b(mainMod, "mouse:272", hl.dsp.window.drag(), "move window", { mouse = true })
 b(mainMod, "mouse:273", hl.dsp.window.resize(), "resize window", { mouse = true })
@@ -226,10 +226,12 @@ b("", "code:123", exec("~/.config/hypr/scripts/Volume.sh --inc"), "volume up", {
 b("", "code:121", exec(sh("$scriptsDir/Volume.sh --toggle")), "toggle mute", { locked = true })
 b("", "code:122", exec(sh("$scriptsDir/Volume.sh --dec")), "volume down", { locked = true, repeating = true })
 b("ALT", "code:122", exec(sh("$scriptsDir/Volume.sh --dec-precise")), "volume down precise", { locked = true, repeating = true })
+b("ALT", "code:123", exec(sh("$scriptsDir/Volume.sh --inc-precise")), "volume up precise", { locked = true, repeating = true })
 b("", "code:174", exec(sh("$scriptsDir/MediaCtrl.sh --stop")), "stop", { locked = true })
 
-
+-- landscape
 --  Steam Custom
 b(mainMod .. " + SHIFT", "N",
   exec("~/.config/hypr/UserScripts/LaunchSteamWorkspace5.sh")
 )
+
