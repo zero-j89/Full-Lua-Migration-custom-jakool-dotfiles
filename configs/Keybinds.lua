@@ -40,7 +40,7 @@ end
 
 -- Common shortcuts
 b(mainMod, "B", exec([[xdg-open "https://"]]), "open default browser")
-b(mainMod, "D", exec("qs -p ~/.config/quickshell-noctalia ipc call launcher toggle"), "Noctalia launcher")
+b(mainMod, "D", exec("qs -p ~/.config/quickshell-noctalia ipc call launcher toggle"), "GZML launcher")
 
 -- b(mainMod, ";", exec("rofi -show drun"), "rofi launcher")
 b(mainMod, "A", exec(sh("$scriptsDir/OverviewToggle.sh")), "desktop overview")
@@ -109,16 +109,27 @@ b(mainMod .. " + SHIFT", "E", exec(sh("$scriptsDir/gzml_quick_settings.sh")), "g
 
 
 
--- Master layout
--- working on this
-
--- Dwindle layout
-b(mainMod, "P", hl.dsp.window.pseudo(), "toggle pseudo dwindle")
-
+-- Layouts
+-- Gzml Original
+-- Toggle master/dwindle layout
 -- Layout-aware init
 hl.on("hyprland.start", function()
-  hl.exec_cmd(os.getenv("HOME") .. "/.config/hypr/scripts/ChangeLayout.sh init")
+ hl.exec_cmd(os.getenv("HOME") .. "/.config/hypr/scripts/ChangeLayout.sh init")
 end)
+
+b(mainMod, "O", hl.dsp.layout("togglesplit"), "toggle dwindle split")
+b(mainMod, "J", hl.dsp.window.cycle_next({ next = true }), "cycle next window")
+b(mainMod, "K", hl.dsp.window.cycle_next({ next = false }), "cycle previous window")
+
+
+-- Toggle Pseudo Dwindle layout
+b(mainMod, "P", function()
+  hl.dispatch(hl.dsp.window.pseudo())
+
+  hl.exec_cmd([[notify-send -e -u low -i ~/.config/swaync/images/ja.png \
+    "Pseudo Layout" \
+    "Toggled pseudo mode"]])
+end, "toggle pseudo dwindle")
 
 
 -- Cycle windows
