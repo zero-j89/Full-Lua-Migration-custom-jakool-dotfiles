@@ -40,10 +40,19 @@ end
 
 -- Common shortcuts
 b(mainMod, "B", exec([[xdg-open "https://"]]), "open default browser")
-b(mainMod, "D", exec("qs -p ~/.config/quickshell-noctalia ipc call launcher toggle"), "GZML launcher")
+-- b(mainMod, "D", exec("qs -p ~/.config/quickshell-noctalia ipc call launcher toggle"), "GZML launcher")
+-- b(mainMod, "D", exec("noctalia msg panel-toggle launcher"), "GZML launcher")
+b(mainMod, "D", exec("qs -p ~/.config/quickshell-gzml ipc call launcher toggle"), "GZML launcher")
 
 -- b(mainMod, ";", exec("rofi -show drun"), "rofi launcher")
-b(mainMod, "A", exec(sh("$scriptsDir/OverviewToggle.sh")), "desktop overview")
+-- b(mainMod, "A", exec(sh("$scriptsDir/OverviewToggle.sh")), "desktop overview")
+local hyprspace = require("Hyprspace")
+
+hl.unbind("SUPER + A")
+hl.bind("SUPER + A", function()
+    hyprspace.toggle()
+end)
+
 b(mainMod, "Return", exec(term), "Open terminal")
 b(mainMod, "E", exec(files), "file manager")
 
@@ -54,10 +63,14 @@ b(mainMod, "S", exec(sh("$scriptsDir/RofiSearch.sh")), "web search")
 b(mainMod .. " + ALT", "O", exec(sh("$scriptsDir/ChangeBlur.sh")), "toggle blur")
 
 b(mainMod .. " + ALT", "G", exec(sh("$scriptsDir/TogglePerformance.sh")), "toggle performance")
-b(mainMod .. " + SHIFT", "G", exec([[sh -c "qs -p ~/.config/quickshell-noctalia ipc call powerProfile toggleNoctaliaPerformance && qs -p ~/.config/quickshell-noctalia ipc call notifications toggleDND"]]), "toggle performance + dnd")
+-- b(mainMod .. " + SHIFT", "G", exec([[sh -c "qs -p ~/.config/quickshell-noctalia ipc call powerProfile toggleNoctaliaPerformance && qs -p ~/.config/quickshell-noctalia ipc call notifications toggleDND"]]), "toggle performance + dnd")
+b(mainMod .. " + SHIFT", "G", exec([[sh -c "qs -p ~/.config/quickshell-gzml ipc call powerProfile toggle"]]), "Toggle power profile")
+
 b(mainMod .. " + ALT", "L", exec(sh("$scriptsDir/ChangeLayout.sh")), "toggle master/dwindle layout")
 b(mainMod .. " + ALT", "V", exec(sh("$scriptsDir/ClipManager.sh")), "clipboard manager")
-b(mainMod, "X", exec("qs -p ~/.config/quickshell-noctalia ipc call plugin:clipper toggle"), "Toggle Clipper")
+-- b(mainMod, "X", exec("qs -p ~/.config/quickshell-noctalia ipc call plugin:clipper toggle"), "Toggle Clipper")
+b(mainMod, "X", exec("qs -p ~/.config/quickshell-gzml ipc call plugin:clipper toggle"), "Toggle Clipper")
+
 b(mainMod .. " + CTRL", "R", exec(sh("$scriptsDir/RofiThemeSelector.sh")), "rofi theme selector")
 -- b(mainMod .. " + CTRL + SHIFT", "R", exec(sh("pkill rofi || true && $scriptsDir/RofiThemeSelector-modified.sh")), "rofi theme selector modified")
 b(mainMod .. " + CTRL", "A", exec(sh("$scriptsDir/Animations.sh")), "Animations Selector")
@@ -86,7 +99,10 @@ b(mainMod .. " + ALT", "mouse_up",
 
 -- UserScripts
 b(mainMod .. " + SHIFT", "M", exec(sh("$UserScripts/RofiBeats.sh")), "online music")
-b(mainMod, "W", exec("qs -p /home/zer0/.config/quickshell-noctalia ipc call plugin:wallcards toggle"), "select wallpaper")
+-- b(mainMod, "W", exec("qs -p /home/zer0/.config/quickshell-noctalia ipc call plugin:wallcards toggle"), "select wallpaper")
+-- b(mainMod, "W", exec("noctalia msg panel-toggle wallpaper"), "Wallpaper Cards")
+b(mainMod, "W", exec("qs -p ~/.config/quickshell-gzml ipc call plugin:wallcards toggle"), "Wallpaper Cards")
+
 b(mainMod .. " + CTRL", "O", dispatch("setprop active opaque toggle"), "toggle active window opacity")
 b(mainMod .. " + SHIFT", "K", exec(sh("$scriptsDir/KeyBinds.sh")), "search keybinds")
 b(mainMod .. " + SHIFT", "O", exec(sh("$UserScripts/ZshChangeTheme.sh")), "change oh-my-zsh theme")
@@ -102,7 +118,10 @@ b(mainMod .. " + CTRL", "F12", dispatch("movecurrentworkspacetomonitor d"), "mov
 b("CTRL + ALT", "Delete", exec(home .. "/.config/hypr/scripts/toggle_sysmon.sh"))
 b(mainMod, "Q", hl.dsp.window.close(), "close active window")
 b(mainMod .. " + SHIFT", "Q", exec(sh("$scriptsDir/KillActiveProcess.sh")), "Terminate active process")
-b("CTRL + ALT", "L", exec("qs -p ~/.config/quickshell-noctalia ipc call lockScreen lock"))
+-- b("CTRL + ALT", "L", exec("qs -p ~/.config/quickshell-noctalia ipc call lockScreen lock"))
+-- b("CTRL + ALT", "L", exec("noctalia msg session lock"), "Lock Screen")
+b("CTRL + ALT", "L", exec("qs -p ~/.config/quickshell-gzml ipc call lockScreen lock"), "Lock Screen")
+
 b("CTRL + ALT", "P", exec(sh("$scriptsDir/Wlogout.sh")), "powermenu")
 b(mainMod .. " + SHIFT", "E", exec(sh("$scriptsDir/gzml_quick_settings.sh")), "gzml quick settings menu")
 
@@ -138,11 +157,6 @@ b("ALT", "Tab", function()
   hl.dispatch(hl.dsp.window.alter_zorder({ mode = "top" }))
 end, "cycle next window")
 
--- Special keys / hotkeys
--- b("", "xf86audioraisevolume", exec(sh("$scriptsDir/Volume.sh --inc")), "volume up", { locked = true, repeating = true })
--- b("", "xf86audiolowervolume", exec(sh("$scriptsDir/Volume.sh --dec")), "volume down", { locked = true, repeating = true })
--- b("ALT", "xf86audioraisevolume", exec(sh("$scriptsDir/Volume.sh --inc-precise")), "volume up precise", { locked = true, repeating = true })
--- b("ALT", "xf86audiolowervolume", exec(sh("$scriptsDir/Volume.sh --dec-precise")), "volume down precise", { locked = true, repeating = true })
 
 -- b("", "xf86AudioMicMute", exec(sh("$scriptsDir/Volume.sh --toggle-mic")), "toggle mic mute", { locked = true })
 -- b("", "xf86audiomute", exec(sh("$scriptsDir/Volume.sh --toggle")), "toggle mute", { locked = true })
@@ -150,12 +164,10 @@ end, "cycle next window")
 -- b("", "xf86Rfkill", exec(sh("$scriptsDir/AirplaneMode.sh")), "airplane mode", { locked = true })
 
 -- Media controls
--- b("", "xf86AudioPlayPause", exec(sh("$scriptsDir/MediaCtrl.sh --pause")), "play/pause", { locked = true })
--- b("", "xf86AudioPause", exec(sh("$scriptsDir/MediaCtrl.sh --pause")), "pause", { locked = true })
--- b("", "xf86AudioPlay", exec(sh("$scriptsDir/MediaCtrl.sh --pause")), "play", { locked = true })
--- b("", "xf86AudioNext", exec(sh("$scriptsDir/MediaCtrl.sh --nxt")), "next track", { locked = true })
--- b("", "xf86AudioPrev", exec(sh("$scriptsDir/MediaCtrl.sh --prv")), "previous track", { locked = true })
--- b("", "xf86audiostop", exec(sh("$scriptsDir/MediaCtrl.sh --stop")), "stop", { locked = true })
+b("", "XF86AudioPlay", exec("playerctl play-pause"), "play/pause", { locked = true })
+b("", "xf86AudioNext", exec(sh("$scriptsDir/MediaCtrl.sh --nxt")), "next track", { locked = true })
+b("", "xf86AudioPrev", exec(sh("$scriptsDir/MediaCtrl.sh --prv")), "previous track", { locked = true })
+b("", "xf86audiostop", exec(sh("$scriptsDir/MediaCtrl.sh --stop")), "stop", { locked = true })
 
 -- Screenshot keybindings
 b(mainMod .. " + ALT", "S", exec(sh("$scriptsDir/ScreenShot.sh --now")), "screenshot now")
@@ -233,16 +245,18 @@ b(mainMod, "comma", hl.dsp.focus({ workspace = "e-1" }), "previous workspace")
 b(mainMod, "mouse:272", hl.dsp.window.drag(), "move window", { mouse = true })
 b(mainMod, "mouse:273", hl.dsp.window.resize(), "resize window", { mouse = true })
 
-b("", "code:123", exec("~/.config/hypr/scripts/Volume.sh --inc"), "volume up", { locked = true, repeating = true })
-b("", "code:121", exec(sh("$scriptsDir/Volume.sh --toggle")), "toggle mute", { locked = true })
-b("", "code:122", exec(sh("$scriptsDir/Volume.sh --dec")), "volume down", { locked = true, repeating = true })
-b("ALT", "code:122", exec(sh("$scriptsDir/Volume.sh --dec-precise")), "volume down precise", { locked = true, repeating = true })
-b("ALT", "code:123", exec(sh("$scriptsDir/Volume.sh --inc-precise")), "volume up precise", { locked = true, repeating = true })
-b("", "code:174", exec(sh("$scriptsDir/MediaCtrl.sh --stop")), "stop", { locked = true })
+-- b("", "code:174", exec(sh("$scriptsDir/MediaCtrl.sh --stop")), "stop", { locked = true })
 
--- landscape
+
 --  Steam Custom
 b(mainMod .. " + SHIFT", "N",
   exec("~/.config/hypr/UserScripts/LaunchSteamWorkspace5.sh")
 )
 
+-- True Volume:
+b("", "code:123", exec("wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%+"), "volume up", { locked = true, repeating = true })
+b("", "code:122", exec("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"), "volume down", { locked = true, repeating = true })
+b("", "code:121", exec("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"), "toggle mute", { locked = true })
+
+b("ALT", "code:123", exec("wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 1%+"), "volume up precise", { locked = true, repeating = true })
+b("ALT", "code:122", exec("wpctl set-volume @DEFAULT_AUDIO_SINK@ 1%-"), "volume down precise", { locked = true, repeating = true })
