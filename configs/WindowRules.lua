@@ -21,7 +21,7 @@ wr({ match = { class = "^(zen-alpha|zen)$" }, tag = "+browser" })
 -- notif tags
 wr({ match = { class = "^(swaync-control-center|swaync-notification-window|swaync-client|class)$" }, tag = "+notif" })
 
--- KooL settings tag
+-- gzml settings tag
 wr({ match = { title = "^(GZML Quick Cheat Sheet)$" }, tag = "+GZML_Cheat" })
 wr({ match = { title = "^(gzml quick settings)$" }, tag = "+gzml_settings" })
 wr({ match = { class = "^(nwg-displays|nwg-look)$" }, tag = "+KooL-Settings" })
@@ -262,3 +262,12 @@ wr({
   no_blur = true,
 })
 
+lr({
+    name = "quickshell-noctalia",
+    match = {
+        namespace = "noctalia-background-.*$",
+    },
+    ignore_alpha = 0.5,
+    blur = true,
+    blur_popups = true,
+})
