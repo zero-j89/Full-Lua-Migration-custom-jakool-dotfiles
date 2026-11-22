@@ -1,5 +1,7 @@
+THIS IS A TEST STACK BUT CONTAINS MOST .LUA CONVERSIONS FOR JAKOOLSDOTS, THESE WERE RELEASED BEFORE ANYONE DID THE .LUA CONVERSION ON THE OFFICIAL REPO AND I WANTED TO GIVE BACK SO I STARTED THIS.. YOU WILL BE ABLE TO FIND MOST BASIC .LUA FILES FOR YOUR HYPRLAND JAKOOL SETUP HERE! 
 
-Okay so this is basically jakoolits dotfiles but slightly modified for my stack so theres a few things you will want to edit
+This was released as a project to give back and might be rough as this is just a test stack and i dont,m keep up with it like i do my personal. 
+Okay so this is basically jakoolits dotfiles but slightly modified for my test stack so theres a few things you will want to edit
 before you use these( if you choose to ).DO NOT FORGET TO BACKUP YOUR ORIGINAL /.config/hypr folder!! For these to work you will need the original jakoolits 
 dependancies. I suggest removing the whole /hypr folder entirely or
 just renaming it so when you replace it with these files you wont have a confusing directory.. OKAY! Down to
